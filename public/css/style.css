@@ -5,6 +5,31 @@ body {
 .container {
     width: 100vw;
     height: 100vh;
-    background-image: url("../assets/loginPagePic.jpg");
-    background-size: cover;
+    /*background-image: url("../assets/loginPagePic.jpg");
+    background-size: cover;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    width: 50%;
+    text-align: center;
+}
+
+.logo img {
+    width: 200px;
+    height: 200px;
+}
+
+.login-container {
+    width: 50%;
+    justify-content: flex-start;
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
 }
