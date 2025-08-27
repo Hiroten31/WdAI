@@ -4,8 +4,23 @@ body {
     background-size: cover;
     width: 100vw;
     height: 100vh;
+}
+
+.nav-panel { 
+    position: fixed;
+    top: 50%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    background-image: url("../assets/bookmarks/panel-background.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    /* transform: rotate(-90deg); */
+}
+
+.nav-panel img {
+    height: 50px;
+    width: 50px;
+    margin: 0;
+    padding: 0; 
 }
