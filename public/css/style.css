@@ -6,21 +6,20 @@ body {
     height: 100vh;
 }
 
-.nav-panel { 
-    position: fixed;
-    top: 50%;
+main {
     display: flex;
-    flex-direction: row;
-    background-image: url("../assets/bookmarks/panel-background.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-    /* transform: rotate(-90deg); */
+    flex-direction: column;
+    height: 100vw;
 }
 
-.nav-panel img {
-    height: 50px;
-    width: 50px;
-    margin: 0;
-    padding: 0; 
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 2em;
+    border-bottom: 1px solid grey;
 }
+
+.projects {
+    font-size: 30px;
+}
+
