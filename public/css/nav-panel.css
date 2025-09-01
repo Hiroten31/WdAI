@@ -8,8 +8,8 @@
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
-    /* THIS LEFT IS TO ANIMATE PANEL TO HIDE */
-    left: -42px;
+    left: -13px;
+    transition: left 0.3s ease;
 }
 
 .nav-panel div {
@@ -36,8 +36,7 @@
     height: 45px;
     background-image: url("/public/assets/bookmarks/arrow.svg");
     background-position: center;
-    /* THIS TRANSFORM IS TO ANIMATE ARROR FLIP */
-    transform: rotate(-180deg) translateX(-10px);
+    transition: transform 0.3s ease;
 }
 
 #sketch {
@@ -50,5 +49,20 @@
 
 .nav-panel a {
     display: contents;
-    /* pointer-events: none; */
+}
+
+.nav-panel.collapsed {
+    left: -42px;
+}
+
+.nav-panel.collapsed #arrow {
+    transform: rotate(-180deg) translateX(-10px);
+}
+
+.nav-panel.collapsed a {
+    pointer-events: none;
+}
+
+.nav-panel.collapsed #arrow {
+    pointer-events: auto;
 }
