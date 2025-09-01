@@ -1,0 +1,50 @@
+header {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 1fr 1fr;
+}
+
+.title {
+    grid-column: 1;
+    grid-row: 1;
+    background-color: rgb(0,180,0);
+}
+
+.search-bar {
+    grid-column: 1;
+    grid-row: 2;
+    background-color: greenyellow;
+}
+
+.search-bar form {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar svg {
+    height: 16px;
+    width: 16px;
+    background-color: red;
+}
+
+.search-bar input {
+    height: 10px;
+}
+
+.login-info {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    background-color: rgb(15,210,15);
+    margin: 10px;
+    font-size: 0.5em;
+}
+
+.login-info svg {
+    height: 1.5em;
+    width: 1.5em;
+}
+
+.logout {
+    background-color: aliceblue;
+}
