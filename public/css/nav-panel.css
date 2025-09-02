@@ -8,18 +8,18 @@
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
-    left: -13px;
+    left: -35px;
     transition: left 0.3s ease;
 }
 
 .nav-panel div {
-    height: 30px;
-    width: 40px;
-    padding: 0px;
+    height: 90px;
+    width: 120px;
+    padding: 10px;
     margin: 0px;
-    margin-left: 15px;
+    margin-left: 40px;
     border: 0px;
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     display: inline-block;
 }
@@ -33,7 +33,10 @@
 }
 
 #arrow {
-    height: 45px;
+    height: 120px;
+    width: 50px;
+    margin: 20px;
+    margin-left: 100px;
     background-image: url("/public/assets/bookmarks/arrow.svg");
     background-position: center;
     transition: transform 0.3s ease;
@@ -52,11 +55,11 @@
 }
 
 .nav-panel.collapsed {
-    left: -42px;
+    left: -160px;
 }
 
 .nav-panel.collapsed #arrow {
-    transform: rotate(-180deg) translateX(-10px);
+    transform: rotate(-180deg) translateX(-30px);
 }
 
 .nav-panel.collapsed a {
