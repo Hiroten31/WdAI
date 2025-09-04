@@ -1,6 +1,6 @@
 header {
     display: grid;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 77% 23%;
     grid-template-rows: 1fr 1fr;
     background-image: url("../assets/images/home/upper-background.jpg");
     background-size: cover;
@@ -20,18 +20,21 @@ header {
     paint-order: stroke fill;
 }
 
-.search-bar {
+.projects-controls {
     grid-column: 1;
     grid-row: 2;
+    align-items: center;
+    display: flex;
 }
 
-.search-bar form {
+.projects-controls form {
     height: 100%;
     display: flex;
     align-items: center;
+    width: fit-content;
 }
 
-.search-bar svg {
+.projects-controls svg {
     height: 2.5em;
     width: 2.5em;
     padding: 0.5em;
@@ -42,15 +45,15 @@ header {
     box-shadow: 8px 8px 21px -7px rgba(0, 0, 0, 1);
 }
 
-.search-bar svg:hover {
+.projects-controls svg:hover {
     outline: 0.2em solid #f5f5f5;
 }
 
-.search-bar svg:active {
+.projects-controls svg:active {
     outline: 0.2em solid #5b5fc7;
 }
 
-.search-bar input {
+.projects-controls input {
     font-size: 2.5em;
     max-width: 16em;
     background-color: #FBE9D3;
@@ -64,12 +67,29 @@ header {
     border-bottom: 0.1em solid #f5f5f5;
 }
 
-.search-bar input:focus {
+.projects-controls input:hover {
+    outline: 0.08em solid #f5f5f5;
+}
+
+.projects-controls input:focus {
     border-bottom: 0.1em solid #5b5fc7;
 }
 
-.search-bar input:hover {
+.add-project {
+    margin-left: auto;
+    margin-right: 1em;
+    font-size: 2.5em;
+    padding: .1em .4em;
+    background-color: #FBE9D3;
+    border-radius: 2em;
+}
+
+.add-project:hover {
     outline: 0.08em solid #f5f5f5;
+}
+
+.add-project:active {
+    outline: 0.08em solid #5b5fc7;
 }
 
 .account-panel {
@@ -78,7 +98,6 @@ header {
     max-width: 12em;
     height: fit-content;
     background-color: #FBE9D3;
-    margin-left: 6em;
     margin-top: 2em;
     padding: 1em;
     border-radius: 2em;
@@ -123,22 +142,38 @@ header {
 
 #projects {
     border-radius: 2em;
-    background-color: #bba386;
+    background: url("../assets/images/home/bookshelf-background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     padding: 2em;
+    min-height: 550px;
     display: flex;
+    justify-content: center;
 }
 
+#projects div:hover {
+    outline: 0.2em solid #f5f5f5;
+}
+
+#projects div:active {
+    outline: 0.2em solid #5b5fc7;
+}
 #projects div {
     background-image: url("../assets/images/home/book-cover.jpg");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    margin: 0.5em;
-    width: 12.5em;
-    height: 15em;
+    box-sizing: border-box;
+    margin: 2em;
+    min-width: 9em;
+    width: 9em;
+    min-height: 14em;
+    height: 14em;
+    padding: 1em;
     text-align: center;
     place-content: center;
     justify-content: center;
-    font-size: 32px;
-    color: #f5f5f5;
+    font-size: 1.7em;
+    color: rgba(204, 202, 110, 0.918);
+    font-family: Garamond, serif;
 }
