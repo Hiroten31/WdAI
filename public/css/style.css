@@ -21,6 +21,7 @@ header {
     padding: 3px;
     margin-bottom: 1vw;
     background-color: #FBE9D3;
+    background-position-x: -200px;
 }
 
 .left-up {

@@ -5,64 +5,6 @@ header {
     background-position-y: -500px;
 }
 
-.left-down form {
-    height: 100%;
-    font-size: 2.5em;
-    display: flex;
-    align-items: center;
-    width: fit-content;
-    height: fit-content;
-    background-color: #FBE9D3;
-    border-radius: 1em;
-    padding: 0.35em;
-    margin-left: 0.3em;
-    box-shadow: 8px 8px 21px -7px rgba(0, 0, 0, 1);
-}
-
-.left-down form svg {
-    height: 1em;
-    width: 1em;
-}
-
-.left-down label {
-    margin-left: 0.3em;
-}
-
-.left-down select {
-    appearance: base-select;
-    &::picker(select) {
-        appearance: base-select;
-    }
-}
-
-.left-down select {
-    font-size: 0.7em;
-    background-color: #f5f5f5;
-    border-radius: 0.5em;
-    align-items: center;
-}
-
-.left-down input[type="submit"] {
-    font-size: 0.5em;
-    margin-left: 0.5em;
-}
-
-.left-down input[type="submit"] {
-    margin-left: 1em;
-    padding: .5em .8em;
-    background-color: #e0c8ab;
-    border-radius: 1em;
-    border: none;
-}
-
-.left-down input[type="submit"]:hover {
-    background-color: #bba386;
-}
-
-.left-down input[type="submit"]:active {
-    outline: 0.2em solid #5b5fc7;
-}
-
 .add-tag {
     margin-left: auto;
     font-size: 2.5em;

@@ -1,5 +1,5 @@
 header {
-    background-image: url("../assets/images/home/upper-background.jpg");
+    background: url("../assets/images/home/upper-background.jpg");
     background-size: cover;
     background-position-y: -65px;
     background-repeat: no-repeat;
