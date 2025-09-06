@@ -55,18 +55,18 @@
     display: contents;
 }
 
-.nav-panel.collapsed {
+html.nav-collapsed .nav-panel {
     left: -160px;
 }
 
-.nav-panel.collapsed #arrow {
+html.nav-collapsed .nav-panel #arrow {
     transform: rotate(-180deg) translateX(-30px);
 }
 
-.nav-panel.collapsed a {
+html.nav-collapsed .nav-panel a {
     pointer-events: none;
 }
 
-.nav-panel.collapsed #arrow {
+html.nav-collapsed .nav-panel #arrow {
     pointer-events: auto;
 }

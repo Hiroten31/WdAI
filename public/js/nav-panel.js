@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const navPanel = document.querySelector(".nav-panel");
     const arrow = document.getElementById("arrow");
 
     arrow.addEventListener("click", () => {
-        navPanel.classList.toggle("collapsed");
+        const html = document.documentElement;
+        html.classList.toggle("nav-collapsed");
+        localStorage.setItem("navPanelCollapsed", html.classList.contains("nav-collapsed"));
     });
 });
