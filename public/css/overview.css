@@ -1,44 +1,53 @@
 header {
-    display: flex;
-    background-color: greenyellow;
-}
-
-.wrapper {
-    height: 100%;
-    width: 75%;
+    display: grid;
+    grid-template-columns: 77% 23%;
+    grid-template-rows: 1fr 1fr;
+    background: url("../assets/images/overview/upper-background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-y: -500px;
 }
 
 .title {
-    height: 50%;
-    font-size: 1em;
+    grid-column: 1;
+    grid-row: 1;
+    padding-left: 0.4em;
+    font-size: 3em;
+    font-style: italic;
     -webkit-text-stroke: 2px #242424;
     text-shadow: 5px 5px 10px rgb(0, 0, 0);
     color: #FBE9D3;
     paint-order: stroke fill;
 }
 
-.tags-wrapper {
-    height: 50%;
-}
-
 .tags-list {
-    width: 50%;
+    grid-column: 1;
+    grid-row: 2;
     display: flex;
     align-items: center;
 }
 
-.tags-list svg {
-    height: 3em;
-    width: 3em;
+.tags-list form {
+    height: 100%;
+    font-size: 2.5em;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+    background-color: #FBE9D3;
+    border-radius: 1em;
+    padding: 0.35em;
+    margin-left: 0.3em;
+    box-shadow: 8px 8px 21px -7px rgba(0, 0, 0, 1);
 }
 
-.tags-list form {
-    font-size: 3em;
-    display: flex;
+.tags-list form svg {
+    height: 1em;
+    width: 1em;
 }
 
 .tags-list label {
-    margin-left: 0.5em;
+    margin-left: 0.3em;
 }
 
 .tags-list select {
@@ -49,10 +58,10 @@ header {
 }
 
 .tags-list select {
-    font-size: 0.5em;
-    margin-left: 1em;
+    font-size: 0.7em;
+    margin-left: 0.4em;
     width: 8em;
-    background-color: rgba(0,0,0,0);
+    background-color: #f5f5f5;
     border-radius: 0.5em;
     align-items: center;
 }
@@ -62,11 +71,46 @@ header {
     margin-left: 0.5em;
 }
 
+.tags-list input {
+    margin-left: 1em;
+    padding: .5em .8em;
+    background-color: #e0c8ab;
+    border-radius: 1em;
+    border: none;
+}
+
+.tags-list input:hover {
+    background-color: #bba386;
+}
+
+.tags-list input:active {
+    outline: 0.2em solid #5b5fc7;
+}
+
 .add-tag {
-    width: 50%;
+    margin-left: auto;
+    font-size: 2.5em;
+    padding: .1em .4em;
+    background-color: #FBE9D3;
+    border-radius: 2em;
+}
+
+.add-tag svg {
+    width: 0.7em;
+    height: 0.7em;
+}
+
+.add-tag:hover {
+    outline: 0.08em solid #f5f5f5;
+}
+
+.add-tag:active {
+    outline: 0.08em solid #5b5fc7;
 }
 
 .account-panel {
+    grid-column: 2;
+    grid-row: 1 / span 2;
     max-width: 12em;
     height: fit-content;
     background-color: #FBE9D3;
@@ -76,5 +120,5 @@ header {
     border-color: black;
     font-size: 1.5em;
     text-align: right;
-    width: 25%;
+    margin: auto;
 }
