@@ -10,6 +10,7 @@
     background-repeat: no-repeat;
     left: -35px;
     transition: left 0.3s ease;
+    z-index: 100;
 }
 
 .nav-panel div {

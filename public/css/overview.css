@@ -59,19 +59,17 @@ header {
 
 .tags-list select {
     font-size: 0.7em;
-    margin-left: 0.4em;
-    width: 8em;
     background-color: #f5f5f5;
     border-radius: 0.5em;
     align-items: center;
 }
 
-.tags-list input {
+.tags-list input[type="submit"] {
     font-size: 0.5em;
     margin-left: 0.5em;
 }
 
-.tags-list input {
+.tags-list input[type="submit"] {
     margin-left: 1em;
     padding: .5em .8em;
     background-color: #e0c8ab;
@@ -79,11 +77,11 @@ header {
     border: none;
 }
 
-.tags-list input:hover {
+.tags-list input[type="submit"]:hover {
     background-color: #bba386;
 }
 
-.tags-list input:active {
+.tags-list input[type="submit"]:active {
     outline: 0.2em solid #5b5fc7;
 }
 

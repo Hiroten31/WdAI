@@ -2,6 +2,8 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel="stylesheet" type="text/css" href="../css/nav-panel.css">
+    <link rel="stylesheet" type="text/css" href="../css/multi-select.css">
+    <script src="../js/multi-select.js"></script>
     <title>Notes</title>
 </head>
 <body>
@@ -15,6 +17,24 @@
     <main>
         <header>
             <div class="search-bar">
+<form>
+    <div class="multiselect">
+        <div class="selectBox" onclick="showCheckboxes()">
+            <select>
+                <option>Select an option</option>
+            </select>
+            <div class="overSelect"></div>
+        </div>
+        <div id="checkboxes">
+            <label for="one">
+                <input type="checkbox" id="one" />First checkbox</label>
+            <label for="two">
+                <input type="checkbox" id="two" />Second checkbox</label>
+            <label for="three">
+                <input type="checkbox" id="three" />Third checkbox</label>
+        </div>
+    </div>
+</form>
             </div>
             <div class="add-project">
             </div>
