@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/home.css">
     <link rel="stylesheet" type="text/css" href="public/css/nav-panel.css">
+    <link rel="stylesheet" type="text/css" href="public/css/popup.css">
     <title>Home</title>
 </head>
 <body>
@@ -45,5 +46,25 @@
             <div>Lorem ipsum: edycja 1. Powrot krola zawijania linii i nie mieszczenia sie w divach. Tom I, wydanie osiemdziesiate</div>
         </section>
     </main>
+    <div id="pop-upWindow" class="window">
+        <div class="window-content">
+            <span class="close-button">X</span>
+            <a>Add a new story</a>
+            <form id="window-form">
+                <label>
+                    Title:
+                    <input type="text" id="story-title" placeholder="Story title" required/>
+                </label>
+                <label>
+                    Description:
+                    <textarea id="story-description" placeholder="Description" required></textarea>
+                </label>
+                <div class="window-add-button">
+                    <button type="submit">Start new story</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<script src="public/js/popup.js"></script>
 <script src="public/js/nav-panel.js"></script>
 </body>
