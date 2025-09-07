@@ -10,4 +10,6 @@ Routing::get('home', 'DefaultController');
 Routing::get('overview', 'DefaultController');
 Routing::get('sketches', 'DefaultController');
 Routing::get('note', 'DefaultController');
+Routing::post('login', 'SecurityController');
+
 Routing::run($path);

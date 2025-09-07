@@ -9,17 +9,24 @@
         <div class="logo-area">
             <div id="storyforge"></div>
         </div>
-        <form>
+        <form action="login" method="post">
             <div class="user-div">
-                Username:
-                <input name="email" type="text">
+                E-mail:
+                <input name="email" type="text" placeholder="bobr@gmail.com">
             </div>
             <div class="pass-div">
                 Password:
-                <input name="password" type="password">
+                <input name="password" type="password" placeholder="password">
+            </div>
+            <div id="login-message">
+                <?php
+                    if(isset($message)) {
+                        echo $message;
+                    }
+                ?>
             </div>
             <div class="log-in">
-                <button>Sign in</button>
+                <button type="submit">Sign in</button>
             </div>
         </form>
         <div class="create-acc">
