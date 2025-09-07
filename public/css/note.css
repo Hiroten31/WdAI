@@ -5,3 +5,35 @@ header {
     background-position-y: -150px;
     background-repeat: no-repeat;
 }
+
+.active-tags {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.active-tags a {
+    margin-left: auto;
+    font-size: 2.5em;
+    padding: .1em .4em;
+    background-color: #FBE9D3;
+    border-radius: 2em;
+    margin-left: 0.4em;
+    box-shadow: 8px 8px 21px -7px rgba(0, 0, 0, 1);
+    align-items: center;
+}
+
+.tags-list {
+    overflow-y: auto;
+    white-space: nowrap;
+    max-width: 30em;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.2em;
+    margin-left: 1em;
+    background-color: #f5f5f5;
+    border: 0.07em solid black;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
