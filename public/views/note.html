@@ -7,20 +7,20 @@
             }
         })();
     </script>
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/note.css">
-    <link rel="stylesheet" type="text/css" href="../css/nav-panel.css">
+    <link rel="stylesheet" type="text/css" href="public/css/style.css">
+    <link rel="stylesheet" type="text/css" href="public/css/note.css">
+    <link rel="stylesheet" type="text/css" href="public/css/nav-panel.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <title>Notes</title>
 </head>
 <body>
     <nav class="nav-panel">
-        <a href="home.html"><div id="home"></div></a>
-        <a href="overview.html"><div id="overview"></div></a>
+        <a href="home"><div id="home"></div></a>
+        <a href="overview"><div id="overview"></div></a>
         <a><div id="arrow"></div></a>
-        <a href="sketches.html"><div id="sketch"></div></a>
-        <a href="note.html"><div id="note"></div></a>
+        <a href="sketches"><div id="sketch"></div></a>
+        <a href="note"><div id="note"></div></a>
     </nav>
     <main>
         <header>
@@ -46,10 +46,11 @@
             </div>
         </header>
         <section>
+            <div id="note-title">A great Hero</div>
             <textarea id="note-editor" placeholder="Start writing your note..."></textarea>
         </section>
     </main>
-<script src="../js/nav-panel.js"></script>
+<script src="public/js/nav-panel.js"></script>
 <script>
     var simplemde = new SimpleMDE({ element: document.getElementById("note-editor") });
 </script>
