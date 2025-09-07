@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/nav-panel.css">
     <link rel="stylesheet" type="text/css" href="public/css/multi-select.css">
     <link rel="stylesheet" type="text/css" href="public/css/popup.css">
-    <title>Notes</title>
+    <title>Sketches</title>
 </head>
 <body>
     <nav class="nav-panel">
@@ -61,25 +61,34 @@
                 <div class="logout">Log out</div>
             </div>
         </header>
-        <section>
-        </section>
+        <?php if(isset($sketch)): ?>
+            <section class="sketches">
+                <div>
+                    <img src="public/uploads/<?= $sketch->getImage() ?>" alt="sketches">
+                    <div>
+                        <h2><?= $sketch->getTitle() ?></h2>
+                        <p><?= $sketch->getDescription() ?></p>
+                    </div>
+                </div>
+            </section>
+        <?php endif; ?>
     </main>
     <div id="pop-upWindow" class="window">
         <div class="window-content">
             <span class="close-button">X</span>
             <a>Add a new sketch</a>
-            <form id="window-form">
+            <form id="window-form" action="addSketch" method="POST" enctype="multipart/form-data">
                 <label>
                     Name:
-                    <input type="text" id="sketch-title" placeholder="Sketch name" required/>
+                    <input name="sketch-name" type="text" id="sketch-title" placeholder="Sketch name" required/>
                 </label>
                 <label>
                     Description:
-                    <textarea id="sketch-description" placeholder="Description" required></textarea>
+                    <textarea name="sketch-description" id="sketch-description" placeholder="Description" required></textarea>
                 </label>
                 <label>
                     Choose one tag:
-                    <select id="sketch-type" required>
+                    <select name="sketch-tag" id="sketch-tag" required>
                         <option value="">Select a tag</option>
                         <option value="scene">Scene</option>
                         <option value="dialogue">Dialogue</option>
@@ -88,12 +97,15 @@
                 </label>
                 <label>
                     Choose one parent:
-                    <select id="sketch-parent" required>
+                    <select name="sketch-parent" id="sketch-parent" required>
                         <option value="">Select a parent</option>
                         <option value="scene">Scene</option>
                         <option value="dialogue">Dialogue</option>
                         <option value="note">Note</option>
                     </select>
+                </label>
+                <label>
+                    <input type="file" name="file">
                 </label>
                 <div class="window-add-button">
                     <button type="submit">Add sketch</button>

@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/nav-panel.css">
     <link rel="stylesheet" type="text/css" href="public/css/multi-select.css">
     <link rel="stylesheet" type="text/css" href="public/css/popup.css">
-    <title>Notes</title>
+    <title>Overview</title>
 </head>
 <body>
     <nav class="nav-panel">

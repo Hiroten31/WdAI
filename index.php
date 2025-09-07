@@ -11,5 +11,6 @@ Routing::get('overview', 'DefaultController');
 Routing::get('sketches', 'DefaultController');
 Routing::get('note', 'DefaultController');
 Routing::post('login', 'SecurityController');
+Routing::post('addSketch', 'SketchController');
 
 Routing::run($path);
