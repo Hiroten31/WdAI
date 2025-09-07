@@ -32,10 +32,12 @@
 
 #tags-form input[type="submit"]:hover {
     background-color: #bba386;
+    cursor: pointer;
 }
 
 #tags-form input[type="submit"]:active {
     outline: 0.2em solid #5b5fc7;
+    cursor: pointer;
 }
 
 .multiselect {

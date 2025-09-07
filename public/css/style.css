@@ -60,10 +60,12 @@ header {
 
 .add-button:hover {
     outline: 0.08em solid #f5f5f5;
+    cursor: pointer;
 }
 
 .add-button:active {
     outline: 0.08em solid #5b5fc7;
+    cursor: pointer;
 }
 
 .right-full {
@@ -115,8 +117,10 @@ section {
 
 .logout:hover {
     background-color: #bba386;
+    cursor: pointer;
 }
 
 .logout:active {
     outline: 0.2em solid #5b5fc7;
+    cursor: pointer;
 }

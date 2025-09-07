@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/sketches.css">
     <link rel="stylesheet" type="text/css" href="public/css/nav-panel.css">
     <link rel="stylesheet" type="text/css" href="public/css/multi-select.css">
+    <link rel="stylesheet" type="text/css" href="public/css/popup.css">
     <title>Notes</title>
 </head>
 <body>
@@ -63,6 +64,44 @@
         <section>
         </section>
     </main>
+    <div id="pop-upWindow" class="window">
+        <div class="window-content">
+            <span class="close-button">X</span>
+            <a>Add a new sketch</a>
+            <form id="window-form">
+                <label>
+                    Name:
+                    <input type="text" id="sketch-title" placeholder="Sketch name" required/>
+                </label>
+                <label>
+                    Description:
+                    <textarea id="sketch-description" placeholder="Description" required></textarea>
+                </label>
+                <label>
+                    Choose one tag:
+                    <select id="sketch-type" required>
+                        <option value="">Select a tag</option>
+                        <option value="scene">Scene</option>
+                        <option value="dialogue">Dialogue</option>
+                        <option value="note">Note</option>
+                    </select>
+                </label>
+                <label>
+                    Choose one parent:
+                    <select id="sketch-parent" required>
+                        <option value="">Select a parent</option>
+                        <option value="scene">Scene</option>
+                        <option value="dialogue">Dialogue</option>
+                        <option value="note">Note</option>
+                    </select>
+                </label>
+                <div class="window-add-button">
+                    <button type="submit">Add sketch</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<script src="public/js/popup.js"></script>
 <script src="public/js/multi-select.js"></script>
 <script src="public/js/nav-panel.js"></script>
 </body>
