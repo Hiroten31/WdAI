@@ -39,6 +39,7 @@ header {
 .left-down {
     grid-column: 1;
     grid-row: 2;
+    font-size: 1em;
     display: flex;
     align-items: center;
 }
