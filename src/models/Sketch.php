@@ -16,53 +16,43 @@ class Sketch {
         $this->image = $image;
     }
 
-    public function getTitle() : string
-    {
+    public function getTitle() : string {
         return $this->title;
     }
 
-    public function setTitle(string $title)
-    {
+    public function setTitle(string $title) {
         $this->title = $title;
     }
 
-    public function getDescription() : string
-    {
+    public function getDescription() : string {
         return $this->description;
     }
 
-    public function setDescription(string $description)
-    {
+    public function setDescription(string $description) {
         $this->description = $description;
     }
 
-    public function getTag() : string
-    {
+    public function getTag() : string {
         return $this->tag;
     }
 
-    public function setTag(string $tag)
-    {
+    public function setTag(string $tag) {
         $this->tag = $tag;
     }
 
-    public function getParent() : string
-    {
+    public function getParent() : string {
         return $this->parent;
     }
 
-    public function setParent(string $parent)
-    {
+    public function setParent(string $parent) {
         $this->parent = $parent;
     }
 
-    public function getImage() : string
-    {
+    public function getImage() : string {
         return $this->image;
     }
 
-    public function setImage(string $image)
-    {
+    public function setImage(string $image) {
         $this->image = $image;
     }
 }

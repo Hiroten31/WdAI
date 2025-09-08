@@ -2,6 +2,7 @@
 
 require_once 'AppController.php';
 require_once __DIR__.'/../models/Sketch.php';
+require_once __DIR__.'/../repository/SketchRepository.php';
 
 class SketchController extends AppController {
 
@@ -10,6 +11,13 @@ class SketchController extends AppController {
     const UPLOAD_DIR = '/../public/uploads/';
 
     private $messages = [];
+    private $sketchRepository;
+
+    public function __construct() {
+        parent::__construct();
+        $this->sketchRepository = new SketchRepository();
+    }
+
     public function addSketch() {
         if($this->isPost() && is_uploaded_file($_FILES['file']['tmp_name']) && $this->validate($_FILES['file'])) {
             move_uploaded_file(
@@ -18,8 +26,12 @@ class SketchController extends AppController {
             );
 
             $sketch = new Sketch($_POST['sketch-name'], $_POST['sketch-description'], $_POST['sketch-tag'], $_POST['sketch-parent'], $_FILES['file']['name']);
+            $this->sketchRepository->addSketch($sketch);
 
-            return $this->render('sketches', ['messages' => $this->messages, 'sketch' => $sketch]);
+            return $this->render('sketches', [
+                'sketches' => $this->sketchRepository->getSketches(),
+                'messages' => $this->messages, 'sketch' => $sketch
+            ]);
         }
 
         $this->render('sketches', ['messages' => $this->messages]);
@@ -37,5 +49,10 @@ class SketchController extends AppController {
         }
 
         return true;
+    }
+
+    public function sketches() {
+        $sketches = $this->sketchRepository->getSketches();
+        $this->render('sketches', ['sketches' => $sketches]);
     }
 }

@@ -61,17 +61,19 @@
                 <div class="logout">Log out</div>
             </div>
         </header>
-        <?php if(isset($sketch)): ?>
-            <section class="sketches">
-                <div>
-                    <img src="public/uploads/<?= $sketch->getImage() ?>" alt="sketches">
-                    <div>
+        <section class="sketches">
+            <?php foreach($sketches as $sketch): ?>
+                <div class="sketch">
+                    <div class="img-space">
+                        <img src="public/uploads/<?= $sketch->getImage() ?>" alt="sketches">
+                    </div>
+                    <div class="sketch-info">
                         <h2><?= $sketch->getTitle() ?></h2>
                         <p><?= $sketch->getDescription() ?></p>
                     </div>
                 </div>
-            </section>
-        <?php endif; ?>
+            <?php endforeach; ?>
+        </section>
     </main>
     <div id="pop-upWindow" class="window">
         <div class="window-content">
@@ -90,18 +92,16 @@
                     Choose one tag:
                     <select name="sketch-tag" id="sketch-tag" required>
                         <option value="">Select a tag</option>
-                        <option value="scene">Scene</option>
-                        <option value="dialogue">Dialogue</option>
-                        <option value="note">Note</option>
+                        <option value="1">Location</option>
+                        <option value="2">Time</option>
+                        <option value="3">Character</option>
                     </select>
                 </label>
                 <label>
                     Choose one parent:
                     <select name="sketch-parent" id="sketch-parent" required>
                         <option value="">Select a parent</option>
-                        <option value="scene">Scene</option>
-                        <option value="dialogue">Dialogue</option>
-                        <option value="note">Note</option>
+                        <option value="1">root</option>
                     </select>
                 </label>
                 <label>

@@ -4,3 +4,35 @@ header {
     background-position-y: -210px;
     background-repeat: no-repeat;
 }
+
+section {
+    display: flex;
+    flex-direction: row;
+    background-color: #FBE9D3;
+}
+
+.sketch {
+    background-color: #bba386;
+    border-radius: 0 0 2em 2em;
+    margin: 1em;
+    border: 0.3em solid black;
+}
+
+.img-space {
+    height: 300px;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FBE9D3;
+    padding: 1em;
+}
+
+.img-space img {
+    max-height: 300px;
+    max-width: 533px;
+}
+
+.sketch-info {
+    padding: 1em;
+}

@@ -15,10 +15,6 @@ class DefaultController extends AppController {
         $this->render('overview');
     }
 
-    public function sketches() {
-        $this->render('sketches');
-    }
-
     public function note() {
         $this->render('note');
     }
