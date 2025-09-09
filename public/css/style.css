@@ -109,11 +109,13 @@ section {
 }
 
 .logout {
+    font-size: 1em;
     display: inline-block;
     width: fit-content;
     background-color: #e0c8ab;
     padding: 0.2em;
     border-radius: 0.5em;
+    border: 0;
 }
 
 .logout:hover {

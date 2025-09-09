@@ -25,9 +25,22 @@ class SecurityController extends AppController {
             return $this->render('login', ['message' => 'Wrong email or password!']);
         }
 
-        // return $this->render('home');
+        session_start();
+        $_SESSION['user_id'] = $userRepository->getUserIdByEmail($email);
+        $_SESSION['user_email'] = $user->getEmail();
+        $_SESSION['user_name'] = $user->getUsername();
 
         $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/home");
+        exit();
+    }
+
+    public function logout() {
+        session_start();
+        session_unset();
+        session_destroy();
+        $url = "http://$_SERVER[HTTP_HOST]";
+        header("Location: {$url}/login");
+        exit();
     }
 }
