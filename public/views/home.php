@@ -54,7 +54,9 @@ if (!isset($_SESSION['user_name'])) {
             </div>
         </header>
         <section id="projects">
-            <div>Lorem ipsum: edycja 1. Powrot krola zawijania linii i nie mieszczenia sie w divach. Tom I, wydanie osiemdziesiate</div>
+            <?php foreach($stories as $story): ?>
+                <div><?= $story->getName() ?></div>
+            <?php endforeach; ?>
         </section>
     </main>
     <div id="pop-upWindow" class="window">

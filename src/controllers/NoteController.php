@@ -18,21 +18,22 @@ class NoteController extends AppController {
             $note = new Note($_POST['note-name'], $_POST['note-description'], $_POST['note-tags'], $_POST['note-parent']);
             $this->noteRepository->addNote($note);
 
-            return $this->render('notes', [
+            return $this->render('note', [
                 'notes' => $this->noteRepository->getNotes(),
-                'messages' => $this->messages, 'note' => $note
+                'messages' => $this->messages,
+                'note' => $note
             ]);
         }
 
-        $this->render('notes', ['messages' => $this->messages]);
+        $this->render('note', ['messages' => $this->messages]);
     }
 
     private function validate(array $file) : bool {
         return true;
     }
 
-    public function notes() {
+    public function note() {
         $notes = $this->noteRepository->getNotes();
-        $this->render('notes', ['notes' => $notes]);
+        $this->render('note', ['notes' => $notes]);
     }
 }

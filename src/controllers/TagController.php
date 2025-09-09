@@ -18,21 +18,22 @@ class TagController extends AppController {
             $tag = new Tag($_POST['tag-name']);
             $this->tagRepository->addTag($tag);
 
-            return $this->render('tags', [
+            return $this->render('overview', [
                 'tags' => $this->tagRepository->getTags(),
-                'messages' => $this->messages, 'tag' => $tag
+                'messages' => $this->messages,
+                'tag' => $tag
             ]);
         }
 
-        $this->render('tags', ['messages' => $this->messages]);
+        $this->render('overview', ['messages' => $this->messages]);
     }
 
     private function validate(array $file) : bool {
         return true;
     }
 
-    public function tags() {
+    public function overview() {
         $tags = $this->tagRepository->getTags();
-        $this->render('tags', ['tags' => $tags]);
+        $this->render('overview', ['tags' => $tags]);
     }
 }
