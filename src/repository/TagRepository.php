@@ -11,13 +11,14 @@ class TagRepository extends Repository {
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $tag = $stmt->fetch(PDO::FETCH_ASSOC);
+        $tag = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($tag == false) {
             return null;
         }
 
         return new Tag(
+            $tag['id'],
             $tag['name']
         );
     }
@@ -40,7 +41,7 @@ class TagRepository extends Repository {
         $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($tags as $tag) {
-            $results[] = new Tag($tag['name']);
+            $results[] = new Tag($tag['id'], $tag['name']);
         }
 
         return $results;

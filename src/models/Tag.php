@@ -1,9 +1,12 @@
 <?php
 
 class Tag {
+
+    private $id;
     private $name;
 
-    public function __construct($name) {
+    public function __construct(?int $id, string $name) {
+        $this->id = $id;
         $this->name = $name;
     }
 
@@ -13,5 +16,9 @@ class Tag {
 
     public function setName(string $name) {
         $this->name = $name;
+    }
+
+    public function getId() : int {
+        return $this->id;
     }
 }

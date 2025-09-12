@@ -4,7 +4,6 @@ body {
     justify-content: center;
     background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("../assets/images/galaxy-background.jpg");
     background-size: cover;
-    width: 100vw;
 }
 
 main {
@@ -77,7 +76,7 @@ header {
     background-color: #FBE9D3;
     box-shadow: 8px 8px 21px -7px rgba(0, 0, 0, 1);
     padding: 1em;
-    border-radius: 2em;
+    border-radius: 1em;
     border-color: black;
     font-size: 1.5em;
     text-align: right;
@@ -126,4 +125,10 @@ section {
 .logout:active {
     outline: 0.2em solid #5b5fc7;
     cursor: pointer;
+}
+
+.invisible {
+    background-color: rgba(0,0,0,0);
+    border: none;
+    appearance: none;
 }

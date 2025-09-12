@@ -45,14 +45,11 @@ if (!isset($_SESSION['user_name'])) {
                             <div class="overSelect"></div>
                         </div>
                         <div class="checkboxes">
-                            <label for="one">
-                                <input type="checkbox" id="one"/>Location</label>
-                            <label for="two">
-                                <input type="checkbox" id="two"/>Time</label>
-                            <label for="three">
-                                <input type="checkbox" id="three"/>Characters</label>
-                            <label for="four">
-                                <input type="checkbox" id="four"/>Quests</label>
+                            <?php foreach ($tags as $tag): ?>
+                                <label>
+                                    <input type="checkbox" value="<?= $tag->getId(); ?>"/><?= $tag->getName(); ?>
+                                </label>
+                            <? endforeach; ?>
                         </div>
                     </div>
                     <input type="submit">

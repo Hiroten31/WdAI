@@ -18,6 +18,25 @@ class StoryController extends AppController {
             $story = new Story($_POST['story-name'], $_POST['story-description']);
             $this->storyRepository->addStory($story);
 
+            header('Location: /home');
+            exit();
+
+            return $this->render('home', [
+                'stories' => $this->storyRepository->getStories(),
+                'messages' => $this->messages,
+                'story' => $story
+            ]);
+
+        }
+
+        $this->render('home', ['messages' => $this->messages]);
+    }
+
+    public function searchStories() {
+        if($this->isGet()) {
+            $story = new Story($_POST['story-name'], $_POST['story-description']);
+            $this->storyRepository->getStories();
+
             return $this->render('home', [
                 'stories' => $this->storyRepository->getStories(),
                 'messages' => $this->messages,

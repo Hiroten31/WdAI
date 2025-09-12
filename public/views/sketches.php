@@ -45,10 +45,11 @@ if (!isset($_SESSION['user_name'])) {
                             <div class="overSelect"></div>
                         </div>
                         <div class="checkboxes">
-                            <label><input type="checkbox" value="Location"/>Location</label>
-                            <label><input type="checkbox" value="Time"/>Time</label>
-                            <label><input type="checkbox" value="Characters"/>Characters</label>
-                            <label><input type="checkbox" value="Quests"/>Quests</label>
+                            <?php foreach ($tags as $tag): ?>
+                                <label>
+                                    <input type="checkbox" value="<?= $tag->getId(); ?>"/><?= $tag->getName(); ?>
+                                </label>
+                            <? endforeach; ?>
                         </div>
                     </div>
                     <input type="submit">
@@ -89,11 +90,11 @@ if (!isset($_SESSION['user_name'])) {
             <form id="window-form" action="addSketch" method="POST" enctype="multipart/form-data">
                 <label>
                     Name:
-                    <input name="sketch-name" type="text" id="sketch-title" placeholder="Sketch name" required/>
+                    <input name="sketch-name" type="text" placeholder="Sketch name" required/>
                 </label>
                 <label>
                     Description:
-                    <textarea name="sketch-description" id="sketch-description" placeholder="Description" required></textarea>
+                    <textarea name="sketch-description" placeholder="Description" required></textarea>
                 </label>
                 <div class="multiselect">
                     <label>
@@ -108,10 +109,11 @@ if (!isset($_SESSION['user_name'])) {
                         <div class="overSelect"></div>
                     </div>
                     <div class="checkboxes">
-                        <label><input type="checkbox" value="Location"/>Location</label>
-                        <label><input type="checkbox" value="Time"/>Time</label>
-                        <label><input type="checkbox" value="Characters"/>Characters</label>
-                        <label><input type="checkbox" value="Quests"/>Quests</label>
+                        <?php foreach ($tags as $tag): ?>
+                            <label>
+                                <input type="checkbox" value="<?= $tag->getId(); ?>"/><?= $tag->getName(); ?>
+                            </label>
+                        <? endforeach; ?>
                     </div>
                 </div>
                 <label>

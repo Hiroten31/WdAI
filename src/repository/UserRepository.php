@@ -24,6 +24,7 @@ class UserRepository extends Repository {
         );
     }
 
+    // dodac ID do obiektu uzytkownika???
     public function getUserIdByEmail(string $email) : int {
         $stmt = $this->db->connect()->prepare(
             'SELECT id FROM public.users WHERE email=:email'
@@ -34,5 +35,9 @@ class UserRepository extends Repository {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $user['id'];
+    }
+
+    public function createAccount() {
+        // TODO check if the e-mail has account
     }
 }

@@ -3,6 +3,7 @@
 require_once 'AppController.php';
 require_once __DIR__.'/../models/Sketch.php';
 require_once __DIR__.'/../repository/SketchRepository.php';
+require_once __DIR__.'/../repository/TagRepository.php';
 
 class SketchController extends AppController {
 
@@ -12,10 +13,12 @@ class SketchController extends AppController {
 
     private $messages = [];
     private $sketchRepository;
+    private $tagRepository;
 
     public function __construct() {
         parent::__construct();
         $this->sketchRepository = new SketchRepository();
+        $this->tagRepository = new TagRepository();
     }
 
     public function addSketch() {
@@ -53,6 +56,7 @@ class SketchController extends AppController {
 
     public function sketches() {
         $sketches = $this->sketchRepository->getSketches();
-        $this->render('sketches', ['sketches' => $sketches]);
+        $tags = $this->tagRepository->getTags();
+        $this->render('sketches', ['sketches' => $sketches, 'tags' => $tags]);
     }
 }

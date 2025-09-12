@@ -58,23 +58,22 @@ header {
     border-bottom: 0.1em solid #5b5fc7;
 }
 
-#projects {
-    border-radius: 2em;
+#stories {
     background-color: #FBE9D3;
-    padding: 2em;
     min-height: 550px;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
-#projects div:hover {
+#stories div:hover {
     outline: 0.2em solid #f5f5f5;
 }
 
-#projects div:active {
+#stories div:active {
     outline: 0.2em solid #5b5fc7;
 }
-#projects div {
+#stories div {
     background-image: url("../assets/images/home/book-cover.jpg");
     background-repeat: no-repeat;
     background-size: cover;

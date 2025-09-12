@@ -34,9 +34,13 @@ if (!isset($_SESSION['user_name'])) {
         <header>
             <div class="left-up">Your bookshelf</div>
             <div class="left-down">
-                <form>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z"/></svg>
-                    <input placeholder="Search for story">
+                <form action="searchStories" method="GET">
+                    <button type="submit" class="invisible">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z"/></svg>
+                    </button>
+                    <label>
+                        <input name="search-story-name" placeholder="Search for story">
+                    </label>
                 </form>
                 <div class="add-button">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/></svg>
@@ -53,7 +57,7 @@ if (!isset($_SESSION['user_name'])) {
                 </form>
             </div>
         </header>
-        <section id="projects">
+        <section id="stories">
             <?php foreach($stories as $story): ?>
                 <div><?= $story->getName() ?></div>
             <?php endforeach; ?>
@@ -63,14 +67,14 @@ if (!isset($_SESSION['user_name'])) {
         <div class="window-content">
             <span class="close-button">X</span>
             <a>Add a new story</a>
-            <form id="window-form">
+            <form id="window-form" action="addStory" method="POST">
                 <label>
                     Title:
-                    <input type="text" id="story-title" placeholder="Story title" required/>
+                    <input name="story-name" type="text" placeholder="Story title" required/>
                 </label>
                 <label>
                     Description:
-                    <textarea id="story-description" placeholder="Description" required></textarea>
+                    <textarea name="story-description" placeholder="Description" required></textarea>
                 </label>
                 <div class="window-add-button">
                     <button type="submit">Start new story</button>
