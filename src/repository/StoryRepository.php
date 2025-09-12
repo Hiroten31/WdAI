@@ -23,23 +23,37 @@ class StoryRepository extends Repository {
         );
     }
 
-    public function addStory(Story $story) {
+    public function addStory(Story $story, int $id_user) {
         $stmt = $this->db->connect()->prepare(
             'INSERT INTO public.stories(name, description)
-                    VALUES (?, ?)'
+                    VALUES (?, ?)
+                    RETURNING id'
         );
         $stmt->execute([
             $story->getName(),
             $story->getDescription()
         ]);
+
+        $id_story = $stmt->fetchColumn();
+        $stmt = $this->db->connect()->prepare(
+            'INSERT INTO public.users_stories(id_user, id_story)
+                    VALUES (?, ?)'
+        );
+        $stmt->execute([
+            $id_user,
+            $id_story
+        ]);
     }
 
-    public function getStories(): array {
+    public function getStories(int $id_user): array {
         $results = [];
         $stmt = $this->db->connect()->prepare(
-            'SELECT * FROM public.stories'
+            'SELECT s.* FROM public.stories s 
+                    INNER JOIN public.users_stories us 
+                        ON s.id = us.id_story 
+                            WHERE us.id_user = :id_user'
         );
-        $stmt->execute();
+        $stmt->execute(['id_user' => $id_user]);
         $stories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($stories as $story) {

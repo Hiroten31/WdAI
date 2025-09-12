@@ -5,6 +5,13 @@ require_once __DIR__.'/../models/User.php';
 require_once __DIR__.'/../repository/UserRepository.php';
 
 class SecurityController extends AppController {
+
+    private $userRepository;
+
+    public function __construct() {
+        parent::__construct();
+        $this->userRepository = new userRepository();
+    }
     public function login() {
         $userRepository = new UserRepository();
 
@@ -42,5 +49,27 @@ class SecurityController extends AppController {
         $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/login");
         exit();
+    }
+
+    public function addAccount() {
+        if($this->isPost()) {
+
+            if($_POST['acc-pass'] !== $_POST['acc-repeat-pass']) {
+                return $this->render('login', ['message' => 'Passwords do not match. Try again!']);
+            }
+            if($this->userRepository->checkMails($_POST['acc-mail'])) {
+                return $this->render('login', ['message' => 'There is an account with this e-mail!']);
+            }
+
+            $user = new User($_POST['acc-username'], $_POST['acc-mail'], $_POST['acc-pass']);
+            $this->userRepository->addAccount($user);
+
+            header('Location: /login');
+            exit();
+
+            return $this->render('login', [ 'messages' => 'Your account has been created! Sign in.']);
+        }
+
+        $this->render('login', ['messages' => $this->messages]);
     }
 }

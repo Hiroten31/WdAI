@@ -38,22 +38,22 @@
         <div class="window-content">
             <span class="close-button">X</span>
             <a>Add a new tag</a>
-            <form id="window-form">
+            <form id="window-form" action="addAccount" method="POST">
                 <label>
                     E-mail:
-                    <input type="text" id="acc-mail" placeholder="john@pork.com" required/>
+                    <input type="text" name="acc-mail" placeholder="john@pork.com" required/>
                 </label>
                 <label>
                     Username:
-                    <input type="text" id="acc-username" placeholder="Username" required/>
+                    <input type="text" name="acc-username" placeholder="Username" required/>
                 </label>
                 <label>
                     Password:
-                    <input type="password" id="acc-pass" placeholder="Secret password" required>
+                    <input type="password" name="acc-pass" placeholder="Secret password" required>
                 </label>
                 <label>
                     Repeat password:
-                    <input type="password" id="acc-repeat-pass" placeholder="Repeat secret password" required>
+                    <input type="password" name="acc-repeat-pass" placeholder="Repeat secret password" required>
                 </label>
                 <div class="window-add-button">
                     <button type="submit">Create</button>

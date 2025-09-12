@@ -1,10 +1,11 @@
 <?php
-
+session_start();
 require_once 'AppController.php';
 require_once __DIR__.'/../models/Story.php';
 require_once __DIR__.'/../repository/StoryRepository.php';
 
 class StoryController extends AppController {
+
     private $messages = [];
     private $storyRepository;
 
@@ -16,13 +17,13 @@ class StoryController extends AppController {
     public function addStory() {
         if($this->isPost()) {
             $story = new Story($_POST['story-name'], $_POST['story-description']);
-            $this->storyRepository->addStory($story);
+            $this->storyRepository->addStory($story, $_SESSION['user_id']);
 
             header('Location: /home');
             exit();
 
             return $this->render('home', [
-                'stories' => $this->storyRepository->getStories(),
+                'stories' => $this->storyRepository->getStories($_SESSION['user_id']),
                 'messages' => $this->messages,
                 'story' => $story
             ]);
@@ -35,10 +36,10 @@ class StoryController extends AppController {
     public function searchStories() {
         if($this->isGet()) {
             $story = new Story($_POST['story-name'], $_POST['story-description']);
-            $this->storyRepository->getStories();
+            $this->storyRepository->getStories($_SESSION['user_id']);
 
             return $this->render('home', [
-                'stories' => $this->storyRepository->getStories(),
+                'stories' => $this->storyRepository->getStories($_SESSION['user_id']),
                 'messages' => $this->messages,
                 'story' => $story
             ]);
@@ -52,7 +53,7 @@ class StoryController extends AppController {
     }
 
     public function home() {
-        $stories = $this->storyRepository->getStories();
+        $stories = $this->storyRepository->getStories($_SESSION['user_id']);
         $this->render('home', ['stories' => $stories]);
     }
 }

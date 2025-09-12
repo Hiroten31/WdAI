@@ -12,6 +12,7 @@ Routing::get('sketches', 'SketchController');
 Routing::get('note', 'NoteController');
 Routing::post('login', 'SecurityController');
 Routing::post('logout', 'SecurityController');
+Routing::post('addAccount', 'SecurityController');
 Routing::post('addSketch', 'SketchController');
 Routing::post('addStory', 'StoryController');
 
