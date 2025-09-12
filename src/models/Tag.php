@@ -1,13 +1,18 @@
 <?php
 
 class Tag {
-
     private $id;
     private $name;
+    private $description;
 
-    public function __construct(?int $id, string $name) {
+    public function __construct(?int $id, string $name, string $description=null) {
         $this->id = $id;
         $this->name = $name;
+        $this->description = $description;
+    }
+
+    public function getId() : int {
+        return $this->id;
     }
 
     public function getName() : string {
@@ -18,7 +23,12 @@ class Tag {
         $this->name = $name;
     }
 
-    public function getId() : int {
-        return $this->id;
+    public function getDescription(): string {
+        return $this->description;
     }
+
+    public function setDescription(string $description): void {
+        $this->description = $description;
+    }
+
 }

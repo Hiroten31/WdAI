@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once 'AppController.php';
 require_once __DIR__.'/../models/Tag.php';
 require_once __DIR__.'/../repository/TagRepository.php';
@@ -15,11 +15,14 @@ class TagController extends AppController {
 
     public function addTag() {
         if($this->isPost()) {
-            $tag = new Tag($_POST['tag-name']);
-            $this->tagRepository->addTag($tag);
+            $tag = new Tag(null,$_POST['tag-name'], $_POST['tag-description']);
+            $this->tagRepository->addTag($tag, $_SESSION['user_id']);
+
+            header('Location: /overview');
+            exit();
 
             return $this->render('overview', [
-                'tags' => $this->tagRepository->getTags(),
+                'tags' => $this->tagRepository->getTags($_SESSION['user_id']),
                 'messages' => $this->messages,
                 'tag' => $tag
             ]);
@@ -33,7 +36,7 @@ class TagController extends AppController {
     }
 
     public function overview() {
-        $tags = $this->tagRepository->getTags();
+        $tags = $this->tagRepository->getTags($_SESSION['user_id']);
         $this->render('overview', ['tags' => $tags]);
     }
 }

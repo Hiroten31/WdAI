@@ -77,14 +77,14 @@ if (!isset($_SESSION['user_name'])) {
         <div class="window-content">
             <span class="close-button">X</span>
             <a>Add a new tag</a>
-            <form id="window-form">
+            <form id="window-form" action="addTag" method="POST">
                 <label>
                     Name:
-                    <input type="text" id="tag-title" placeholder="Tag name" required/>
+                    <input type="text" name="tag-name" placeholder="Tag name" required/>
                 </label>
                 <label>
                     Description:
-                    <textarea id="tag-description" placeholder="Description" required></textarea>
+                    <textarea name="tag-description" placeholder="Description"></textarea>
                 </label>
                 <div class="window-add-button">
                     <button type="submit">Add tag</button>

@@ -56,7 +56,7 @@ class SketchController extends AppController {
 
     public function sketches() {
         $sketches = $this->sketchRepository->getSketches();
-        $tags = $this->tagRepository->getTags();
+        $tags = $this->tagRepository->getTags($_SESSION['user_id']);
         $this->render('sketches', ['sketches' => $sketches, 'tags' => $tags]);
     }
 }

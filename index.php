@@ -15,6 +15,8 @@ Routing::post('logout', 'SecurityController');
 Routing::post('addAccount', 'SecurityController');
 Routing::post('addSketch', 'SketchController');
 Routing::post('addStory', 'StoryController');
+Routing::post('addTag', 'TagController');
+
 
 
 Routing::run($path);
