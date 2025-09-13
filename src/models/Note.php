@@ -1,16 +1,22 @@
 <?php
 
 class Note {
+    private $id;
     private $name;
     private $description;
-    private $parent;
+    private $parentId;
     private $reference_to;
 
-    public function __construct($name, $description, $parent, $reference_to = null) {
+    public function __construct(?int $id, string $name, string $description, int $parentId, int $reference_to = null) {
+        $this->id = $id;
         $this->name = $name;
         $this->description = $description;
-        $this->parent = $parent;
+        $this->parentId = $parentId;
         $this->reference_to = $reference_to;
+    }
+
+    public function getId() : int {
+        return $this->id;
     }
 
     public function getName() : string {
@@ -29,20 +35,12 @@ class Note {
         $this->description = $description;
     }
 
-    public function getTag() : string {
-        return $this->tag;
+    public function getParentId() : string {
+        return $this->parentId;
     }
 
-    public function setTag(string $tag) {
-        $this->tag = $tag;
-    }
-
-    public function getParent() : string {
-        return $this->parent;
-    }
-
-    public function setParent(string $parent) {
-        $this->parent = $parent;
+    public function setParentId(string $parentId) {
+        $this->parentId = $parentId;
     }
 
     public function getReferenceTo() : string {

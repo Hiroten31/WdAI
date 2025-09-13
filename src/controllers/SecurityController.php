@@ -3,6 +3,8 @@
 require_once 'AppController.php';
 require_once __DIR__.'/../models/User.php';
 require_once __DIR__.'/../repository/UserRepository.php';
+require_once __DIR__ . '/../models/Story.php';
+require_once __DIR__ . '/../models/Note.php';
 
 class SecurityController extends AppController {
 
@@ -36,6 +38,8 @@ class SecurityController extends AppController {
         $_SESSION['user_id'] = $userRepository->getUserIdByEmail($email);
         $_SESSION['user_email'] = $user->getEmail();
         $_SESSION['user_name'] = $user->getUsername();
+        $_SESSION['last_story'] = $userRepository->getLastStory($_SESSION['user_id']);
+        $_SESSION['last_note'] = $userRepository->getLastNote($_SESSION['user_id']);
 
         $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/home");

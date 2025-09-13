@@ -1,27 +1,30 @@
 <?php
 
 class Sketch {
-    private $title;
+    private $id;
+    private $name;
     private $description;
-    private $tag;
-    private $parent;
+    private $parent_note_id;
     private $image;
 
-    public function __construct($title, $description, $tag, $parent, $image)
-    {
-        $this->title = $title;
+    public function __construct(?int $id, string $name, string $description, int $parent_note_id, $image) {
+        $this->id = $id;
+        $this->name = $name;
         $this->description = $description;
-        $this->tag = $tag;
-        $this->parent = $parent;
+        $this->parent_note_id = $parent_note_id;
         $this->image = $image;
     }
 
-    public function getTitle() : string {
-        return $this->title;
+    public function getId() : int {
+        return $this->id;
     }
 
-    public function setTitle(string $title) {
-        $this->title = $title;
+    public function getName() : string {
+        return $this->name;
+    }
+
+    public function setName(string $name) {
+        $this->name = $name;
     }
 
     public function getDescription() : string {
@@ -32,20 +35,12 @@ class Sketch {
         $this->description = $description;
     }
 
-    public function getTag() : string {
-        return $this->tag;
+    public function getParentNoteId() : string {
+        return $this->parent_note_id;
     }
 
-    public function setTag(string $tag) {
-        $this->tag = $tag;
-    }
-
-    public function getParent() : string {
-        return $this->parent;
-    }
-
-    public function setParent(string $parent) {
-        $this->parent = $parent;
+    public function setParentNoteId(int $parentNoteId) {
+        $this->parent_note_id = $parentNoteId;
     }
 
     public function getImage() : string {

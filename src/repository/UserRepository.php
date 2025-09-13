@@ -18,12 +18,15 @@ class UserRepository extends Repository {
         }
 
         return new User(
+            $user['id'],
             $user['username'],
             $user['email'],
-            $user['password']
+            $user['password'],
+            $user['admin']
         );
     }
 
+    // Potrzebne, zeby nie zapisywac hasla w ciasteczkach (dla bezpieczenstwa???)
     public function getUserIdByEmail(string $email) : int {
         $stmt = $this->db->connect()->prepare(
             'SELECT id FROM public.users WHERE email=:email'
@@ -58,5 +61,45 @@ class UserRepository extends Repository {
             $user->getEmail(),
             $user->getPassword()
         ]);
+    }
+
+    public function getLastStory(int $user_id) : Story {
+        $stmt = $this->db->connect()->prepare(
+            'SELECT s.*
+                    FROM public.stories s
+                    JOIN public.users_sessions us ON s.id = us.last_story_id
+                    WHERE us.user_id = :user_id;'
+        );
+        $stmt->execute([
+            'user_id' => $user_id
+        ]);
+
+        $lastStory = $stmt->fetch(PDO::FETCH_ASSOC);
+        return new Story(
+            $lastStory['id'],
+            $lastStory['name'],
+            $lastStory['description'],
+            $lastStory['creation_date']
+        );
+    }
+
+    public function getLastNote(int $user_id) : Note {
+        $stmt = $this->db->connect()->prepare(
+            'SELECT n.*
+                    FROM public.notes n
+                    JOIN public.users_sessions us ON n.id = us.last_note_id
+                    WHERE us.user_id = :user_id;'
+        );
+        $stmt->execute([
+            'user_id' => $user_id
+        ]);
+        $lastNote = $stmt->fetch(PDO::FETCH_ASSOC);
+        return new Note(
+            $lastNote['id'],
+            $lastNote['name'],
+            $lastNote['description'],
+            $lastNote['parent_id'],
+            $lastNote['creation_date']
+        );
     }
 }

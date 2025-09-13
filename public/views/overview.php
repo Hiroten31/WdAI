@@ -54,7 +54,7 @@ if (!isset($_SESSION['user_name'])) {
                     </div>
                     <input type="submit">
                 </form>
-                <div class="add-button">
+                <div class="add-button" data-open-modal="tag-pop-upWindow">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/></svg>
                     Add a new tag
                 </div>
@@ -73,7 +73,7 @@ if (!isset($_SESSION['user_name'])) {
             
         </section>
     </main>
-    <div id="pop-upWindow" class="window">
+    <div id="tag-pop-upWindow" class="window">
         <div class="window-content">
             <span class="close-button">X</span>
             <a>Add a new tag</a>

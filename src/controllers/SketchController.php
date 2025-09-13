@@ -3,7 +3,6 @@
 require_once 'AppController.php';
 require_once __DIR__.'/../models/Sketch.php';
 require_once __DIR__.'/../repository/SketchRepository.php';
-require_once __DIR__.'/../repository/TagRepository.php';
 
 class SketchController extends AppController {
 
@@ -13,12 +12,10 @@ class SketchController extends AppController {
 
     private $messages = [];
     private $sketchRepository;
-    private $tagRepository;
 
     public function __construct() {
         parent::__construct();
         $this->sketchRepository = new SketchRepository();
-        $this->tagRepository = new TagRepository();
     }
 
     public function addSketch() {
@@ -28,7 +25,7 @@ class SketchController extends AppController {
                 dirname(__DIR__).self::UPLOAD_DIR.$_FILES['file']['name']
             );
 
-            $sketch = new Sketch($_POST['sketch-name'], $_POST['sketch-description'], $_POST['sketch-tag'], $_POST['sketch-parent'], $_FILES['file']['name']);
+            $sketch = new Sketch(null, $_POST['sketch-name'], $_POST['sketch-description'], $_POST['sketch-parent'], $_FILES['file']['name']);
             $this->sketchRepository->addSketch($sketch);
 
             return $this->render('sketches', [
@@ -55,8 +52,7 @@ class SketchController extends AppController {
     }
 
     public function sketches() {
-        $sketches = $this->sketchRepository->getSketches();
-        $tags = $this->tagRepository->getTags($_SESSION['user_id']);
-        $this->render('sketches', ['sketches' => $sketches, 'tags' => $tags]);
+        $sketches = $this->sketchRepository->getSketches($_SESSION['last_story']->getId());
+        $this->render('sketches', ['sketches' => $sketches]);
     }
 }

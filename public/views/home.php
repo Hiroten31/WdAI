@@ -42,7 +42,7 @@ if (!isset($_SESSION['user_name'])) {
                         <input name="search-story-name" placeholder="Search for story">
                     </label>
                 </form>
-                <div class="add-button">
+                <div class="add-button add-button-style" data-open-modal="pop-upWindow">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/></svg>
                     Add a new story
                 </div>
@@ -59,7 +59,7 @@ if (!isset($_SESSION['user_name'])) {
         </header>
         <section id="stories">
             <?php foreach($stories as $story): ?>
-                <div><?= $story->getName() ?></div>
+                <div data-open-modal="story-pop-upWindow" data-story-id="<?= $story->getId() ?>"><?= $story->getId() ?> <?= $story->getName() ?></div>
             <?php endforeach; ?>
         </section>
     </main>
@@ -82,6 +82,52 @@ if (!isset($_SESSION['user_name'])) {
             </form>
         </div>
     </div>
+    <div id="story-pop-upWindow" class="window">
+        <div class="window-content">
+            <span class="close-button">X</span>
+            <a>Manage your story</a>
+            <div class="pop-upManager">
+                <div class="removeObject">
+                    <form id="window-form" action="removeStory" method="POST">
+                        <label>
+                            Retype whole title to accept:
+                            <input name="story-name" type="text" placeholder="Story title" required/>
+                        </label>
+                        <div class="window-add-button">
+                            <button type="submit">Remove story</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="changeObject">
+                    <form id="window-form" action="changeStory" method="POST">
+                        <label>
+                            Change title:
+                            <input name="story-name" type="text" placeholder="Story title" required/>
+                        </label>
+                        <label>
+                            Change description:
+                            <textarea name="story-description" placeholder="Description" required></textarea>
+                        </label>
+                        <div class="window-add-button">
+                            <button type="submit">Update story</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="selectObject" style="font-size: 1.5em">
+                    <form id="window-form" action="selectStory" method="POST">
+                        <label>
+                            Proceed to build this story:
+                        </label>
+                        <input type="hidden" name="storyId" value="">
+                        <div class="window-add-button">
+                            <button type="submit">Work on the story</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 <script src="public/js/popup.js"></script>
+<script src="public/js/passOverVars.js"></script>
 <script src="public/js/nav-panel.js"></script>
 </body>

@@ -30,11 +30,11 @@
                 <button type="submit">Sign in</button>
             </div>
         </form>
-        <div class="add-button">
+        <div data-open-modal="create-acc-pop-upWindow" class="add-button">
             Create an account
         </div>
     </div>
-    <div id="pop-upWindow" class="window">
+    <div id="create-acc-pop-upWindow" class="window">
         <div class="window-content">
             <span class="close-button">X</span>
             <a>Add a new tag</a>

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once 'AppController.php';
 require_once __DIR__.'/../models/Note.php';
 require_once __DIR__.'/../repository/NoteRepository.php';
@@ -15,7 +15,7 @@ class NoteController extends AppController {
 
     public function addNote() {
         if($this->isPost()) {
-            $note = new Note($_POST['note-name'], $_POST['note-description'], $_POST['note-tags'], $_POST['note-parent']);
+            $note = new Note(null, $_POST['note-name'], $_POST['note-description'], $_POST['note-parent'], $_POST['note-reference']=null);
             $this->noteRepository->addNote($note);
 
             return $this->render('note', [
@@ -28,12 +28,8 @@ class NoteController extends AppController {
         $this->render('note', ['messages' => $this->messages]);
     }
 
-    private function validate(array $file) : bool {
-        return true;
-    }
-
     public function note() {
-        $notes = $this->noteRepository->getNotes();
+        $notes = $this->noteRepository->getNotes($_SESSION['last_story']->getId());
         $this->render('note', ['notes' => $notes]);
     }
 }

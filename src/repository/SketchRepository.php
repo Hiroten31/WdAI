@@ -18,10 +18,10 @@ class SketchRepository extends Repository {
         }
 
         return new Sketch(
-            $sketch['title'],
+            $sketch['id'],
+            $sketch['name'],
             $sketch['description'],
-            $sketch['tag'],
-            $sketch['parent'],
+            $sketch['parent_note_id'],
             $sketch['image']
         );
     }
@@ -32,23 +32,33 @@ class SketchRepository extends Repository {
                     VALUES (?, ?, ?, ?)'
         );
         $stmt->execute([
-            $sketch->getTitle(),
+            $sketch->getName(),
             $sketch->getDescription(),
-            $sketch->getParent(),
+            $sketch->getParentNoteId(),
             $sketch->getImage()
         ]);
     }
 
-    public function getSketches(): array {
+    public function getSketches(int $id_story): array {
         $results = [];
         $stmt = $this->db->connect()->prepare(
-            'SELECT * FROM public.sketches'
+            'SELECT s.* 
+                    FROM public.sketches s
+                    INNER JOIN public.stories_sketches ss 
+                    ON s.id = ss.id_sketch
+                    WHERE ss.id_story = :id_story'
         );
-        $stmt->execute();
+        $stmt->execute(['id_story' => $id_story]);
         $sketches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($sketches as $sketch) {
-            $results[] = new Sketch($sketch['name'], $sketch['description'], $sketch['tag'], $sketch['parent'], $sketch['image']);
+            $results[] = new Sketch(
+                $sketch['id'],
+                $sketch['name'],
+                $sketch['description'],
+                $sketch['parent_note_id'],
+                $sketch['image']
+            );
         }
 
         return $results;

@@ -31,10 +31,6 @@ class TagController extends AppController {
         $this->render('overview', ['messages' => $this->messages]);
     }
 
-    private function validate(array $file) : bool {
-        return true;
-    }
-
     public function overview() {
         $tags = $this->tagRepository->getTags($_SESSION['user_id']);
         $this->render('overview', ['tags' => $tags]);

@@ -1,13 +1,24 @@
 <?php
 
 class Story {
+    private $id;
     private $name;
     private $description;
+    private $creation_date;
 
-    public function __construct($name, $description)
-    {
+    public function __construct(?int $id, string $name, string $description, $creation_date = null) {
+        $this->id = $id;
         $this->name = $name;
         $this->description = $description;
+        $this->creation_date = $creation_date;
+    }
+
+    public function getId() : int {
+        return $this->id;
+    }
+
+    public function getCreationDate() {
+        return $this->creation_date;
     }
 
     public function getName() : string {

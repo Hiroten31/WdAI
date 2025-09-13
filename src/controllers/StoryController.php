@@ -16,7 +16,7 @@ class StoryController extends AppController {
 
     public function addStory() {
         if($this->isPost()) {
-            $story = new Story($_POST['story-name'], $_POST['story-description']);
+            $story = new Story(null, $_POST['story-name'], $_POST['story-description']);
             $this->storyRepository->addStory($story, $_SESSION['user_id']);
 
             header('Location: /home');
@@ -33,9 +33,10 @@ class StoryController extends AppController {
         $this->render('home', ['messages' => $this->messages]);
     }
 
+    // TODO IMPLEMENTACJA
     public function searchStories() {
         if($this->isGet()) {
-            $story = new Story($_POST['story-name'], $_POST['story-description']);
+            $story = new Story(null, $_POST['story-name'], $_POST['story-description']);
             $this->storyRepository->getStories($_SESSION['user_id']);
 
             return $this->render('home', [
@@ -48,8 +49,28 @@ class StoryController extends AppController {
         $this->render('home', ['messages' => $this->messages]);
     }
 
-    private function validate(array $file) : bool {
-        return true;
+    public function selectStory() {
+        if($this->isPost()) {
+            // Zaktualizowanie bazy
+            $this->storyRepository->selectStory((int) $_POST['storyId'], $_SESSION['user_id']);
+
+
+            // Zaktualizowanie danych w sesji
+            $story = $this->storyRepository->getStory((int) $_POST['storyId']);
+            $_SESSION['last_story'] = $story;
+
+            header('Location: /home');
+            exit();
+
+            return $this->render('home', [
+                'stories' => $this->storyRepository->getStories($_SESSION['user_id']),
+                'messages' => $this->messages,
+                'story' => $story
+            ]);
+
+        }
+
+        $this->render('home', ['messages' => $this->messages]);
     }
 
     public function home() {

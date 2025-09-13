@@ -15,10 +15,10 @@
 /* Modal content */
 .window-content {
     background-color: #FBE9D3;
-    margin: 10% auto;
+    margin: 5% auto;
     padding: 1em;
     border-radius: 1em;
-    width: 20vw;
+    width: min-content;
     position: relative;
     box-shadow: 8px 8px 21px -7px rgba(0, 0, 0, 1);
 }
@@ -108,4 +108,18 @@
 .window-content button[type="submit"]:active {
     outline: 0.2em solid #5b5fc7;
     cursor: pointer;
+}
+
+.pop-upManager {
+    font-size: 0.75em;
+    width: 60vw;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.pop-upManager div {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
 }

@@ -16,7 +16,6 @@ Routing::post('addAccount', 'SecurityController');
 Routing::post('addSketch', 'SketchController');
 Routing::post('addStory', 'StoryController');
 Routing::post('addTag', 'TagController');
-
-
+Routing::post('selectStory', 'StoryController');
 
 Routing::run($path);
