@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_name'])) {
 
 ?>
 <!DOCTYPE html>
-<head>
+<head xmlns="">
     <script>
         (function() {
             if (localStorage.getItem("navPanelCollapsed") === "true") {
@@ -70,8 +70,13 @@ if (!isset($_SESSION['user_name'])) {
                 </form>
             </div>
         </header>
-        <section class="notes-visualization">
-            
+        <section id="notes">
+            <?php if($message): ?>
+                <div><?= $message?></div>
+            <?php endif;?>
+            <?php if(isset($notes)) foreach($notes as $note): ?>
+                <div data-open-modal="notes-pop-upWindow" data-note-id="<?= $note->getId() ?>">ID: <?= $note->getId() ?>, Name: <?= $note->getName() ?></div>
+            <?php endforeach; ?>
         </section>
     </main>
     <div id="tag-pop-upWindow" class="window">
@@ -93,7 +98,124 @@ if (!isset($_SESSION['user_name'])) {
             </form>
         </div>
     </div>
+    <div id="notes-pop-upWindow" class="window">
+        <div class="window-content">
+            <span class="close-button">X</span>
+            <a>Manage your notes</a>
+            <div class="pop-upManager">
+                <div class="removeObject">
+                    <form id="window-form" action="removeSketch" method="POST">
+                        <label>
+                            Retype name of sketch to accept:
+                            <input name="sketch-name" type="text" placeholder="Sketch name" required/>
+                            <input type="hidden" name="sketchId" value="">
+                        </label>
+                        <div class="window-add-button">
+                            <button type="submit">Remove sketch</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="changeObject">
+                    <form id="window-form" action="changeSketch" method="POST">
+                        <label>
+                            Change name:
+                            <input name="sketch-name" type="text" placeholder="Sketch name" required/>
+                            <input type="hidden" name="sketchId" value="">
+                        </label>
+                        <label>
+                            Change description:
+                            <textarea name="sketch-description" placeholder="Description" required></textarea>
+                        </label>
+                        <div class="multiselect">
+                            <label>
+                                Change tags:
+                            </label>
+                            <div class="selectBox">
+                                <label>
+                                    <select name="sketch-tag" id="sketch-tag" required>
+                                        <option>Select the tags</option>
+                                    </select>
+                                </label>
+                                <div class="overSelect"></div>
+                            </div>
+                            <div class="checkboxes">
+                                <?php foreach ($tags as $tag): ?>
+                                    <label>
+                                        <input type="checkbox" value="<?= $tag->getId(); ?>"/><?= $tag->getName(); ?>
+                                    </label>
+                                <? endforeach; ?>
+                            </div>
+                        </div>
+                        <label>
+                            Choose one parent:
+                            <select name="sketch-parent" id="sketch-parent" required>
+                                <option value="1">root</option>
+                            </select>
+                        </label>
+                        <div class="window-add-button">
+                            <button type="submit">Update sketch</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="addObject">
+                    <form id="window-form" action="addNote" method="POST">
+                        <label>
+                            Name:
+                            <input name="note-name" type="text" placeholder="Note name" required/>
+                            <input type="hidden" name="noteId" value="">
+                        </label>
+                        <label>
+                            Description:
+                            <textarea name="note-description" placeholder="Description" required></textarea>
+                        </label>
+                        <div class="multiselect">
+                            <label>
+                                Select tags:
+                            </label>
+                            <div class="selectBox">
+                                <label>
+                                    <select name="note-tags" id="note-tags" required>
+                                        <option>Select the tags</option>
+                                    </select>
+                                </label>
+                                <div class="overSelect"></div>
+                            </div>
+                            <div class="checkboxes">
+                                <?php foreach ($tags as $tag): ?>
+                                    <label>
+                                        <input type="checkbox" value="<?= $tag->getId(); ?>"/><?= $tag->getName(); ?>
+                                    </label>
+                                <? endforeach; ?>
+                            </div>
+                        </div>
+                        <label>
+                            Choose one parent:
+                            <select name="note-parent" id="note-parent" required>
+                                <option value="1">root</option>
+                            </select>
+                        </label>
+                        <div class="window-add-button">
+                            <button type="submit">Add new note</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="selectObject">
+                    <form id="window-form" action="selectNote" method="POST">
+                        <label>
+                            Proceed to write this story note:
+                        </label>
+                        <input type="hidden" name="noteId" value="">
+                        <div class="window-add-button">
+                            <button type="submit">Work on the note</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="public/js/listBuilder.js"></script>
 <script src="public/js/popup.js"></script>
+<script src="public/js/passOverVars.js"></script>
 <script src="public/js/nav-panel.js"></script>
 <script src="public/js/multi-select.js"></script>
 </body>

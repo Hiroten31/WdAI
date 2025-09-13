@@ -17,7 +17,7 @@ class NoteRepository extends Repository {
             return null;
         }
 
-        return new Note(
+        return new Note (
             $note['id'],
             $note['name'],
             $note['description'],
@@ -26,16 +26,42 @@ class NoteRepository extends Repository {
         );
     }
 
-    public function addNote(Note $note) {
+    public function addNote(Note $note, $id_story, string $tags) {
+        // Dodanie notatki do bazy
         $stmt = $this->db->connect()->prepare(
             'INSERT INTO public.notes(name, description, parent_id, reference_to)
-                    VALUES (?, ?, ?, ?)'
+                    VALUES (?, ?, ?, ?) RETURNING id'
         );
         $stmt->execute([
             $note->getName(),
             $note->getDescription(),
             $note->getParentId(),
             $note->getReferenceTo()
+        ]);
+        $id_note = $stmt->fetchColumn();
+        // Dodanie relacji pod ktora historia sie znajduje
+        $stmt = $this->db->connect()->prepare(
+            'INSERT INTO public.stories_notes(id_story, id_note) VALUES (?, ?)'
+        );
+        $stmt->execute([$id_story, $id_note]);
+
+        // Dodanie tagow do notatki
+        foreach ($tags as $tag) {
+            $stmt = $this->db->connect()->prepare(
+                'INSERT INTO public.notes_tags(id_note, id_tag) VALUES (?, ?)'
+            );
+            $stmt->execute([$id_note, $tag->getId()]);
+        }
+
+    }
+
+    public function selectNote(int $id_note, int $id_user) {
+        $stmt = $this->db->connect()->prepare(
+            'UPDATE public.users_sessions SET last_note_id = :note_id WHERE user_id = :user_id'
+        );
+        $stmt->execute([
+            ':note_id' => $id_note,
+            ':user_id' => $id_user
         ]);
     }
 
@@ -45,7 +71,7 @@ class NoteRepository extends Repository {
             'SELECT n.* 
                     FROM public.notes n
                     INNER JOIN public.stories_notes sn 
-                    ON n.id = sn.id_story
+                    ON n.id = sn.id_note
                     WHERE sn.id_story = :id_story'
         );
         $stmt->execute(['id_story' => $id_story]);

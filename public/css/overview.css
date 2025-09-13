@@ -4,3 +4,8 @@ header {
     background-size: cover;
     background-position-y: -500px;
 }
+
+section div:hover {
+    color: cornflowerblue;
+    font-weight: bold;
+}

@@ -15,17 +15,47 @@ class NoteController extends AppController {
 
     public function addNote() {
         if($this->isPost()) {
-            $note = new Note(null, $_POST['note-name'], $_POST['note-description'], $_POST['note-parent'], $_POST['note-reference']=null);
-            $this->noteRepository->addNote($note);
+            $note = new Note(null, $_POST['note-name'], $_POST['note-description'], $_POST['note-parent']);
+            //$this->noteRepository->addNote($note, $_SESSION['last_story']->getId(), $_POST['note-tags']);
 
-            return $this->render('note', [
-                'notes' => $this->noteRepository->getNotes(),
+            header('Location: /overview');
+            console.log($_POST['note-tags']);
+            exit();
+
+            return $this->render('overview', [
+                'stories' => $this->storyRepository->getStories($_SESSION['user_id']),
                 'messages' => $this->messages,
-                'note' => $note
+                'story' => $story
             ]);
+
         }
 
-        $this->render('note', ['messages' => $this->messages]);
+        $this->render('overview', ['messages' => $this->messages]);
+    }
+
+    public function selectNote() {
+        if($this->isPost()) {
+            // Zaktualizowanie bazy
+            $this->noteRepository->selectNote((int) $_POST['noteId'], $_SESSION['user_id']);
+
+            var_dump($_POST['noteId']);
+
+            // Zaktualizowanie danych w sesji
+            $note = $this->noteRepository->getNote((int) $_POST['noteId']);
+            $_SESSION['last_note'] = $note;
+
+            header('Location: /overview');
+            exit();
+
+            return $this->render('overview', [
+                'stories' => $this->storyRepository->getStories($_SESSION['user_id']),
+                'messages' => $this->messages,
+                'story' => $story
+            ]);
+
+        }
+
+        $this->render('overview', ['messages' => $this->messages]);
     }
 
     public function note() {

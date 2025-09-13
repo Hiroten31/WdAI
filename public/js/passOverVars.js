@@ -10,11 +10,17 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Modal:', modal);
             if (!modal) return;
 
-            const hiddenInput = modal.querySelector('input[name="storyId"]');
-            console.log('Hidden input:', hiddenInput);
+            // Try storyId first, fallback to noteId
+            let hiddenInput = modal.querySelector('input[name="storyId"]');
+            let datasetValue = trigger.dataset.storyId;
 
-            if (hiddenInput) {
-                hiddenInput.value = trigger.dataset.storyId;
+            if (!hiddenInput) {
+                hiddenInput = modal.querySelector('input[name="noteId"]');
+                datasetValue = trigger.dataset.noteId;
+            }
+
+            if (hiddenInput && datasetValue) {
+                hiddenInput.value = datasetValue;
                 console.log('Set hidden input value:', hiddenInput.value);
             }
         });

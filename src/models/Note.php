@@ -7,7 +7,7 @@ class Note {
     private $parentId;
     private $reference_to;
 
-    public function __construct(?int $id, string $name, string $description, int $parentId, int $reference_to = null) {
+    public function __construct(?int $id, string $name, string $description, ?int $parentId, ?int $reference_to = null) {
         $this->id = $id;
         $this->name = $name;
         $this->description = $description;
@@ -35,15 +35,15 @@ class Note {
         $this->description = $description;
     }
 
-    public function getParentId() : string {
+    public function getParentId() : ?int {
         return $this->parentId;
     }
 
-    public function setParentId(string $parentId) {
+    public function setParentId(int $parentId) {
         $this->parentId = $parentId;
     }
 
-    public function getReferenceTo() : string {
+    public function getReferenceTo() : ?int {
         return $this->reference_to;
     }
 

@@ -7,10 +7,12 @@ require_once __DIR__.'/../repository/TagRepository.php';
 class TagController extends AppController {
     private $messages = [];
     private $tagRepository;
+    private $noteRepository;
 
     public function __construct() {
         parent::__construct();
         $this->tagRepository = new TagRepository();
+        $this->noteRepository = new NoteRepository();
     }
 
     public function addTag() {
@@ -37,6 +39,7 @@ class TagController extends AppController {
             exit();
         }
         $tags = $this->tagRepository->getTags($_SESSION['user_id']);
-        $this->render('overview', ['tags' => $tags]);
+        $notes = $this->noteRepository->getNotes($_SESSION['last_story']->getId());
+        $this->render('overview', ['tags' => $tags, 'notes' => $notes]);
     }
 }

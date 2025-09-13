@@ -17,5 +17,8 @@ Routing::post('addSketch', 'SketchController');
 Routing::post('addStory', 'StoryController');
 Routing::post('addTag', 'TagController');
 Routing::post('selectStory', 'StoryController');
+Routing::post('addNote', 'NoteController');
+Routing::post('selectNote', 'NoteController');
+
 
 Routing::run($path);

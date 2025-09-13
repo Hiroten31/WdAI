@@ -55,7 +55,7 @@ class StoryController extends AppController {
             $this->storyRepository->selectStory((int) $_POST['storyId'], $_SESSION['user_id']);
 
             // Zaktualizowanie danych w sesji
-            $story = $this->storyRepository->getStory((int) $_POST['storyId']);
+            $story = $this->storyRepository->getStory($_POST['storyId']);
             $_SESSION['last_story'] = $story;
 
             header('Location: /overview');
