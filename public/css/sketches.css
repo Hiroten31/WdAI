@@ -16,6 +16,15 @@ section {
     border-radius: 0 0 2em 2em;
     margin: 1em;
     border: 0.3em solid black;
+    box-shadow: 8px 8px 21px -7px rgba(0, 0, 0, 1);
+}
+
+.sketch:hover {
+    outline: 0.2em solid #f5f5f5;
+}
+
+.sketch:active {
+    outline: 0.2em solid #5b5fc7;
 }
 
 .img-space {

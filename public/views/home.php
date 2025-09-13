@@ -58,8 +58,11 @@ if (!isset($_SESSION['user_name'])) {
             </div>
         </header>
         <section id="stories">
-            <?php foreach($stories as $story): ?>
-                <div data-open-modal="story-pop-upWindow" data-story-id="<?= $story->getId() ?>"><?= $story->getId() ?> <?= $story->getName() ?></div>
+            <?php if($message): ?>
+                <div><?= $message?></div>
+            <?php endif;?>
+            <?php if(isset($stories)) foreach($stories as $story): ?>
+                <div data-open-modal="story-pop-upWindow" data-story-id="<?= $story->getId() ?>"><?= $story->getName() ?></div>
             <?php endforeach; ?>
         </section>
     </main>

@@ -79,7 +79,7 @@ if(!isset($_SESSION['last_story'])) {
         </header>
         <section class="sketches">
             <?php foreach($sketches as $sketch): ?>
-                <div class="sketch">
+                <div class="sketch" data-open-modal="sketch-edit-pop-upWindow" data-sketch-id="<?= $sketch->getId() ?>">
                     <div class="img-space">
                         <img src="public/uploads/<?= $sketch->getImage() ?>" alt="sketches">
                     </div>
@@ -139,7 +139,73 @@ if(!isset($_SESSION['last_story'])) {
             </form>
         </div>
     </div>
+    <div id="sketch-edit-pop-upWindow" class="window">
+        <div class="window-content">
+            <span class="close-button">X</span>
+            <a>Manage your sketch</a>
+            <div class="pop-upManager">
+                <div class="removeObject">
+                    <form id="window-form" action="removeSketch" method="POST">
+                        <label>
+                            Retype name of sketch to accept:
+                            <input name="sketch-name" type="text" placeholder="Sketch name" required/>
+                            <input type="hidden" name="sketchId" value="">
+                        </label>
+                        <div class="window-add-button">
+                            <button type="submit">Remove sketch</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="changeObject">
+                    <form id="window-form" action="changeSketch" method="POST">
+                        <label>
+                            Change name:
+                            <input name="sketch-name" type="text" placeholder="Sketch name" required/>
+                            <input type="hidden" name="sketchId" value="">
+                        </label>
+                        <label>
+                            Change description:
+                            <textarea name="sketch-description" placeholder="Description" required></textarea>
+                        </label>
+                        <div class="multiselect">
+                            <label>
+                                Change tags:
+                            </label>
+                            <div class="selectBox">
+                                <label>
+                                    <select name="sketch-tag" id="sketch-tag" required>
+                                        <option>Select the tags</option>
+                                    </select>
+                                </label>
+                                <div class="overSelect"></div>
+                            </div>
+                            <div class="checkboxes">
+                                <?php foreach ($tags as $tag): ?>
+                                    <label>
+                                        <input type="checkbox" value="<?= $tag->getId(); ?>"/><?= $tag->getName(); ?>
+                                    </label>
+                                <? endforeach; ?>
+                            </div>
+                        </div>
+                        <label>
+                            Choose one parent:
+                            <select name="sketch-parent" id="sketch-parent" required>
+                                <option value="1">root</option>
+                            </select>
+                        </label>
+                        <label>
+                            <input type="file" name="file">
+                        </label>
+                        <div class="window-add-button">
+                            <button type="submit">Update sketch</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 <script src="public/js/popup.js"></script>
+<script src="public/js/passOverVars.js"></script>
 <script src="public/js/multi-select.js"></script>
 <script src="public/js/nav-panel.js"></script>
 </body>

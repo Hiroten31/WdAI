@@ -7,11 +7,6 @@ if (!isset($_SESSION['user_name'])) {
     exit();
 }
 
-if(!isset($_SESSION['last_story'])) {
-    $this->render('home', ['message' => 'You have to choose a story first!']);
-    header("Location: /home");
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <head>

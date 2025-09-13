@@ -54,15 +54,14 @@ class StoryController extends AppController {
             // Zaktualizowanie bazy
             $this->storyRepository->selectStory((int) $_POST['storyId'], $_SESSION['user_id']);
 
-
             // Zaktualizowanie danych w sesji
             $story = $this->storyRepository->getStory((int) $_POST['storyId']);
             $_SESSION['last_story'] = $story;
 
-            header('Location: /home');
+            header('Location: /overview');
             exit();
 
-            return $this->render('home', [
+            return $this->render('overview', [
                 'stories' => $this->storyRepository->getStories($_SESSION['user_id']),
                 'messages' => $this->messages,
                 'story' => $story
@@ -70,7 +69,7 @@ class StoryController extends AppController {
 
         }
 
-        $this->render('home', ['messages' => $this->messages]);
+        $this->render('overview', ['messages' => $this->messages]);
     }
 
     public function home() {

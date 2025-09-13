@@ -58,6 +58,10 @@ class SketchController extends AppController {
     }
 
     public function sketches() {
+        if(!isset($_SESSION['last_story'])) {
+            $this->render('home', ['message' => 'You have to create and choose a story first!']);
+            exit();
+        }
         $sketches = $this->sketchRepository->getSketches($_SESSION['last_story']->getId());
         $tags = $this->tagRepository->getTags($_SESSION['user_id']);
         $this->render('sketches', ['sketches' => $sketches, 'tags' => $tags]);

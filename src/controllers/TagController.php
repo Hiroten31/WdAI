@@ -32,6 +32,10 @@ class TagController extends AppController {
     }
 
     public function overview() {
+        if(!isset($_SESSION['last_story'])) {
+            $this->render('home', ['message' => 'You have to create and choose a story first!']);
+            exit();
+        }
         $tags = $this->tagRepository->getTags($_SESSION['user_id']);
         $this->render('overview', ['tags' => $tags]);
     }

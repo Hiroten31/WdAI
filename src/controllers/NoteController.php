@@ -29,6 +29,10 @@ class NoteController extends AppController {
     }
 
     public function note() {
+        if(!isset($_SESSION['last_story'])) {
+            $this->render('home', ['message' => 'You have to create and choose a story first!', 'sketches' => null]);
+            exit();
+        }
         $notes = $this->noteRepository->getNotes($_SESSION['last_story']->getId());
         $this->render('note', ['notes' => $notes]);
     }

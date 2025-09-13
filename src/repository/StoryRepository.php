@@ -53,8 +53,8 @@ class StoryRepository extends Repository {
             'UPDATE public.users_sessions SET last_story_id = :story_id WHERE user_id = :user_id'
         );
         $stmt->execute([
-            $id_story,
-            $id_user
+            ':story_id' => $id_story,
+            ':user_id' => $id_user
         ]);
     }
 
