@@ -127,7 +127,6 @@ if(!isset($_SESSION['last_story'])) {
                 <label>
                     Choose one parent:
                     <select name="sketch-parent" id="sketch-parent" required>
-                        <option value="">Select a parent</option>
                         <option value="1">root</option>
                     </select>
                 </label>

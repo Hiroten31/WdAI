@@ -33,7 +33,7 @@ if (!isset($_SESSION['user_name'])) {
     </nav>
     <main>
         <header>
-            <div class="left-up">Lorem ipsum: edycja 1. Powrot krola zawijania linii i nie mieszczenia sie w divach. Tom I, wydanie osiemdziesiate</div>
+            <div class="left-up"><?php echo $_SESSION['last_story']->getName(); ?></div>
             <div class="left-down">
                 <div class="active-tags">
                     <a>Active tags:</a>

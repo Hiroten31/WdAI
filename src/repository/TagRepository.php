@@ -65,7 +65,6 @@ class TagRepository extends Repository {
             $id_story = null;
         }
 
-
         $stmt = $this->db->connect()->prepare(
             'SELECT t.id, t.name, t.description FROM public.tags t
                     LEFT JOIN public.tags_stories ts 
