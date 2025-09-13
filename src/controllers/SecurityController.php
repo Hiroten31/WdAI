@@ -65,7 +65,7 @@ class SecurityController extends AppController {
                 return $this->render('login', ['message' => 'There is an account with this e-mail!']);
             }
 
-            $user = new User($_POST['acc-username'], $_POST['acc-mail'], $_POST['acc-pass']);
+            $user = new User(null, $_POST['acc-username'], $_POST['acc-mail'], $_POST['acc-pass'], false);
             $this->userRepository->addAccount($user);
 
             header('Location: /login');

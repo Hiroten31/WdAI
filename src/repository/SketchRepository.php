@@ -26,10 +26,10 @@ class SketchRepository extends Repository {
         );
     }
 
-    public function addSketch(Sketch $sketch) {
+    public function addSketch(Sketch $sketch, $id_story) {
         $stmt = $this->db->connect()->prepare(
             'INSERT INTO public.sketches(name, description, parent_note_id, image)
-                    VALUES (?, ?, ?, ?)'
+                    VALUES (?, ?, ?, ?) RETURNING id'
         );
         $stmt->execute([
             $sketch->getName(),
@@ -37,6 +37,16 @@ class SketchRepository extends Repository {
             $sketch->getParentNoteId(),
             $sketch->getImage()
         ]);
+        $id_sketch = $stmt->fetchColumn();
+
+        $stmt = $this->db->connect()->prepare(
+            'INSERT INTO public.stories_sketches(id_story, id_sketch) VALUES(?, ?)'
+        );
+        $stmt->execute([
+            $id_story,
+            $id_sketch
+        ]);
+
     }
 
     public function getSketches(int $id_story): array {

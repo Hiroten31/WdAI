@@ -32,10 +32,10 @@ class SketchController extends AppController {
             );
 
             $sketch = new Sketch(null, $_POST['sketch-name'], $_POST['sketch-description'], $_POST['sketch-parent'], $_FILES['file']['name']);
-            $this->sketchRepository->addSketch($sketch);
+            $this->sketchRepository->addSketch($sketch, $_SESSION['last_story']->getId());
 
             return $this->render('sketches', [
-                'sketches' => $this->sketchRepository->getSketches(),
+                'sketches' => $this->sketchRepository->getSketches($_SESSION['last_story']->getId()),
                 'messages' => $this->messages, 'sketch' => $sketch
             ]);
         }
