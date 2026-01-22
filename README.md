@@ -46,16 +46,16 @@ Normalized level at 3NF, with at least 30 test records.
 
 ## 4. Repository
 The repository is build based on the project idea "StoryForge" and the branches are different types of realization.
-In the end this branch will became `main` and be the only branch and implementation of the idea.
+In the end this branch will became `main` and be the only branch and implementation of the idea. Hopefully.
 
 ## 5. Functionality
 - Logging into the website
 - Creating multiple `Project`s
-- Adding `tags` for each `Project`
+- Creating `tags` in each `Project`
 - Adding `notes` for each `Project`
 - Adding `tags` for each `note`
-- Making `notes` able to be parent to eachother
-- Generating the nested list of `notes`
+- Making `notes` able to be parent to eachother endlessly
+- Generating the nested list of `notes` and reactive requests during the interactions (probably won't work)
 
 If I'll have enough time:
 - Adding `sketches`, so upload of images for each `Project`
@@ -63,30 +63,46 @@ If I'll have enough time:
 - Adding sharing to other users
 
 ## 6. Technology stack
-1. React - because I'll need dnd-kit library for my nested list
-2. Node.js + Express
-3. PostgreSQL
+1. React - I'll need `dnd-kit` library for my nested list generation
+2. Node.js + Express - Great communication tool for my case
+3. PostgreSQL - I used it few times and created a cluster with it, very lightweighted
 
 ## 7. Code architecture
 **Project**:
 
 ZTPAI/
+
 ├── backend/
+
 │   ├── src/
+
 │   │   ├── index.js
+
 │   ├── package.json
+
 │   └── Dockerfile
+
 │
+
 ├── frontend/
+
 │   ├── src/
+
 │   ├── package.json
+
 │   └── Dockerfile
+
 │
+
 ├── docker-compose.yml
+
 └── README.md
 
 
+
 ## 8. UX/UI
+
+I will need to use [this feature](https://master--5fc05e08a4a65d0021ae0bf2.chromatic.com/iframe.html?id=examples-tree-sortable--all-features&viewMode=story) on one of my sites
 
 ## 9. Authentication
 
@@ -95,6 +111,8 @@ ZTPAI/
 ## 11. Frontend-API
 
 ## 12. Code quality
+
+The best!
 
 ## 13. Asynchronous processing / queues
 
