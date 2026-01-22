@@ -38,6 +38,7 @@ Now you will see in a overview a nested list tree that will connect one to anoth
 
 ## 2. Architecture
 Placeholder:
+
 <img width="603" height="636" alt="Screenshot 2025-11-22 at 11 19 29" src="https://github.com/user-attachments/assets/e08ee95c-3334-49af-89d5-ff724ac031b3" />
 
 ## 3. Database
@@ -68,12 +69,22 @@ If I'll have enough time:
 
 ## 7. Code architecture
 **Project**:
-frontend
-╰
-backend
-╰
-*docker-compose.yaml*
-*README.md*
+
+ZTPAI/
+├── backend/
+│   ├── src/
+│   │   ├── index.js
+│   ├── package.json
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── Dockerfile
+│
+├── docker-compose.yml
+└── README.md
+
 
 ## 8. UX/UI
 
