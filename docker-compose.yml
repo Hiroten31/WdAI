@@ -11,6 +11,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   backend:
     build: ./backend
@@ -21,6 +22,8 @@ services:
       - db
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/appdb
+    volumes:
+      - ./backend/src:/app/src
 
   frontend:
     build: ./frontend
@@ -29,6 +32,9 @@ services:
       - "5173:5173"
     depends_on:
       - backend
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
 
 volumes:
   pgdata:
