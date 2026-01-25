@@ -1,8 +1,7 @@
 .note-tree {
-  padding: 1.5rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  background: #fafbfc;
+  border-radius: 6px;
 }
 
 .empty-notes {
@@ -18,17 +17,20 @@
 
 .btn-add-root {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #2389ff;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
-  transition: opacity 0.3s;
+  transition: all 0.2s cubic-bezier(0.18, 0.67, 0.6, 1.22);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .btn-add-root:hover {
-  opacity: 0.9;
+  background: #1e79d9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .tree-list {
@@ -38,59 +40,40 @@
 }
 
 .tree-list.nested {
-  padding-left: 2rem;
-  margin-top: 0.5rem;
+  padding-left: 0;
+  margin-top: 4px;
   border-left: 2px solid #e0e0e0;
-  margin-left: 0;
-  padding-left: 1.5rem;
+  margin-left: 12px;
+  padding-left: 12px;
 }
 
 .tree-item {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   list-style: none;
+  position: relative;
 }
 
 .tree-item.over .tree-item-content {
-  background-color: rgba(102, 126, 234, 0.05);
+  background-color: #2389ff;
+  color: white;
 }
 
-/* Drop indicator - above */
-.tree-item.over.above .tree-item-content::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  right: 6px;
-  height: 3px;
-  background: #667eea;
-  top: -2px;
-  border-radius: 2px;
-  z-index: 10;
+.tree-item.over .tree-item-content .note-title,
+.tree-item.over .tree-item-content .note-preview {
+  color: white;
 }
 
-/* Drop indicator - below */
-.tree-item.over.below .tree-item-content::after {
-  content: '';
-  position: absolute;
-  left: 6px;
-  right: 6px;
-  height: 3px;
-  background: #667eea;
-  bottom: -2px;
-  border-radius: 2px;
-  z-index: 10;
-}
-
-/* Drop indicator - over (make child) */
-.tree-item.over.over .tree-item-content {
-  background-color: rgba(102, 126, 234, 0.1);
-  border-left: 3px solid #667eea;
+.tree-item.over .tree-item-content .drag-handle,
+.tree-item.over .tree-item-content .toggle-btn {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .tree-item-content {
-  padding: 0.75rem;
+  padding: 10px 12px;
   border-radius: 4px;
-  transition: all 0.2s;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
   position: relative;
+  user-select: none;
 }
 
 .tree-item-content.dragging {
@@ -100,24 +83,28 @@
 .tree-item-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 4px;
   user-select: none;
+  width: 100%;
 }
 
 .drag-handle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   cursor: grab;
   color: #999;
-  transition: color 0.2s;
+  transition: color 0.2s ease, background-color 0.2s ease;
   flex-shrink: 0;
+  border-radius: 4px;
+  margin-right: 4px;
 }
 
 .drag-handle:hover {
-  color: #667eea;
+  color: #2389ff;
+  background-color: rgba(35, 137, 255, 0.05);
 }
 
 .drag-handle:active {
@@ -134,13 +121,13 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #667eea;
-  transition: transform 0.2s;
+  color: #2389ff;
+  transition: transform 0.2s cubic-bezier(0.18, 0.67, 0.6, 1.22);
   flex-shrink: 0;
 }
 
 .toggle-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .toggle-placeholder {
@@ -153,25 +140,21 @@
   flex: 1;
   cursor: pointer;
   min-width: 0;
-}
-
-.tree-item-info:hover {
-  background-color: rgba(102, 126, 234, 0.05);
-  border-radius: 4px;
-  padding: 0.25rem;
+  padding: 2px 4px;
 }
 
 .note-title {
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 500;
   color: #333;
   word-break: break-word;
+  line-height: 1.4;
 }
 
 .note-preview {
-  margin: 0.25rem 0 0 0;
-  font-size: 0.85rem;
+  margin: 2px 0 0 0;
+  font-size: 0.8rem;
   color: #999;
   white-space: nowrap;
   overflow: hidden;
@@ -180,13 +163,15 @@
 
 .tree-item-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 4px;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s ease;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
-.tree-item-header:hover .tree-item-actions {
+.tree-item-header:hover .tree-item-actions,
+.tree-item-content:hover .tree-item-actions {
   opacity: 1;
 }
 
@@ -194,21 +179,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   background: none;
-  border: 1px solid #e0e0e0;
+  border: none;
   border-radius: 4px;
   cursor: pointer;
   color: #666;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .action-btn:hover:not(:disabled) {
-  background-color: #f5f5f5;
-  border-color: #667eea;
-  color: #667eea;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #2389ff;
+  transform: scale(1.1);
 }
 
 .action-btn:disabled {
@@ -217,19 +202,55 @@
 }
 
 .delete-btn {
-  color: #e74c3c;
+  color: #f56565;
 }
 
 .delete-btn:hover:not(:disabled) {
-  background-color: #fadbd8;
-  border-color: #e74c3c;
+  color: #f56565;
 }
 
 .add-child-btn {
-  color: #27ae60;
+  color: #48bb78;
 }
 
 .add-child-btn:hover {
-  background-color: #d5f4e6;
-  border-color: #27ae60;
+  color: #38a169;
+}
+
+/* Smooth transitions for items */
+.tree-item {
+  animation: slideIn 200ms ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Smooth height transitions for tree content */
+.tree-item-content {
+  will-change: background-color, transform;
+}
+
+/* Better feedback when dragging over */
+.tree-item.over .tree-item-content {
+  animation: pulse 150ms ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

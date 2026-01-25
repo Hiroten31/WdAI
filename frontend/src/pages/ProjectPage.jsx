@@ -13,12 +13,14 @@ import {
   useSensor,
   useSensors,
   MeasuringStrategy,
+  defaultDropAnimation,
 } from '@dnd-kit/core';
 import {
   SortableContext,
   arrayMove,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { flattenTree, getProjection, buildTree, removeChildrenOf } from '../components/NoteTree/utilities';
 import './ProjectPage.css';
 
@@ -36,7 +38,31 @@ export function ProjectPage() {
   const [overId, setOverId] = useState(null);
   const [offsetLeft, setOffsetLeft] = useState(0);
   
-  const indentationWidth = 50;
+  const indentationWidth = 10;
+
+  // Drop animation config
+  const dropAnimationConfig = {
+    keyframes({ transform }) {
+      return [
+        { opacity: 1, transform: CSS.Transform.toString(transform.initial) },
+        {
+          opacity: 0,
+          transform: CSS.Transform.toString({
+            ...transform.final,
+            x: transform.final.x + 5,
+            y: transform.final.y + 5,
+          }),
+        },
+      ];
+    },
+    easing: 'ease-out',
+    sideEffects({ active }) {
+      active.node.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: defaultDropAnimation.duration,
+        easing: defaultDropAnimation.easing,
+      });
+    },
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -294,7 +320,7 @@ export function ProjectPage() {
               />
             </SortableContext>
 
-            <DragOverlay>
+            <DragOverlay dropAnimation={dropAnimationConfig}>
               {activeId ? (
                 <div className="drag-overlay">
                   <div className="drag-overlay-card">

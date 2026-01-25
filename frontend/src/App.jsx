@@ -4,6 +4,7 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { ProjectPage } from './pages/ProjectPage';
+import { NoteEditorPage } from './pages/NoteEditorPage';
 import './App.css';
 
 function ProtectedRoute({ children }) {
@@ -31,6 +32,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <ProjectPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/projects/:projectId/notes/:noteId"
+        element={
+          <ProtectedRoute>
+            <NoteEditorPage />
           </ProtectedRoute>
         }
       />

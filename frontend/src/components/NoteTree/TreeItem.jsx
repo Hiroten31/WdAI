@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSortable, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ChevronDown, ChevronRight, Trash2, Plus, GripVertical } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import './TreeItem.css';
 
 export function TreeItem({
@@ -18,6 +19,7 @@ export function TreeItem({
   indentationWidth = 50,
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
 
   const {
     attributes,
@@ -40,9 +42,9 @@ export function TreeItem({
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: 'background-color 200ms ease',
     opacity: isDragging ? 0.5 : 1,
-    paddingLeft: `${itemDepth * indentationWidth}px`,
+    paddingLeft: '10px',
   };
 
   const hasChildren = note.children && note.children.length > 0;
@@ -86,7 +88,10 @@ export function TreeItem({
             <div className="toggle-placeholder" />
           )}
 
-          <div className="tree-item-info">
+          <div 
+            className="tree-item-info"
+            onClick={() => navigate(`/projects/${projectId}/notes/${note.id}`)}
+          >
             <h4 className="note-title">{note.title}</h4>
             {note.content && (
               <p className="note-preview">{note.content.substring(0, 50)}...</p>

@@ -4,7 +4,7 @@
 }
 
 .project-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2389ff 0%, #1e5eb3 100%);
   color: white;
   padding: 1.5rem 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -30,12 +30,13 @@
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease;
   margin-bottom: 1rem;
 }
 
 .btn-back:hover {
   background-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(-2px);
 }
 
 .project-info {
@@ -82,17 +83,20 @@
 
 .btn-primary {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #2389ff;
   color: white;
   border: none;
   border-radius: 4px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.3s;
+  transition: all 0.2s cubic-bezier(0.18, 0.67, 0.6, 1.22);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
+  background: #1e79d9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .loading,
@@ -121,11 +125,36 @@
   }
 }
 
-.drag-overlay .drag-overlay-card {
-  padding: 0.5rem 0.75rem;
+/* Drag Overlay Styling */
+.drag-overlay {
+  pointer-events: none;
+}
+
+.drag-overlay-card {
+  padding: 12px 16px;
   background: white;
-  border: 1px solid rgba(0,0,0,0.08);
   border-radius: 6px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  font-weight: 600;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 6px 18px rgba(0, 0, 0, 0.12);
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #333;
+  animation: popIn 200ms cubic-bezier(0.18, 0.67, 0.6, 1.22);
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: scale(1.05);
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
