@@ -72,6 +72,7 @@ export function NoteEditorPage() {
 
     try {
       setSaving(true);
+      // Don't send parentNoteId to avoid moving the note
       await updateNote(projectId, noteId, title, content);
       setHasUnsavedChanges(false);
     } catch (err) {

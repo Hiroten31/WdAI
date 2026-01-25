@@ -210,6 +210,11 @@ export function ProjectPage() {
     // Only proceed if projection is valid (null means operation would create a cycle)
     if (projected !== null && projected && over) {
       const { depth, parentId } = projected;
+
+      // Guard: never allow a note to become its own parent
+      if (parentId === active.id) {
+        return;
+      }
       const clonedItems = JSON.parse(JSON.stringify(flattenedNotes));
       const overIndex = clonedItems.findIndex(({ id }) => id === over.id);
       const activeIndex = clonedItems.findIndex(({ id }) => id === active.id);

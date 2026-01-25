@@ -77,10 +77,10 @@ export async function createNote(projectId, userId, title, content = '', parentN
   return result.rows[0];
 }
 
-export async function updateNote(noteId, projectId, userId, title, content, parentNoteId = null) {
+export async function updateNote(noteId, projectId, userId, title, content, parentNoteId = undefined) {
   // Verify user owns the note (through project)
   const noteCheck = await pool.query(
-    `SELECT n.id FROM notes n
+    `SELECT n.id, n.parent_note_id FROM notes n
      JOIN projects p ON n.project_id = p.id
      WHERE n.id = $1 AND n.project_id = $2 AND p.user_id = $3`,
     [noteId, projectId, userId]
@@ -90,8 +90,20 @@ export async function updateNote(noteId, projectId, userId, title, content, pare
     throw new Error('Note not found or access denied');
   }
 
+  const currentParentId = noteCheck.rows[0].parent_note_id;
+  
+  // If parentNoteId is not provided (undefined), keep the current parent_note_id
+  const newParentNoteId = parentNoteId !== undefined ? parentNoteId : currentParentId;
+
+  console.log('updateNote service:', { 
+    noteId, 
+    currentParentId, 
+    receivedParentNoteId: parentNoteId,
+    newParentNoteId 
+  });
+
   // Prevent circular references
-  if (parentNoteId && parentNoteId === noteId) {
+  if (newParentNoteId && newParentNoteId === noteId) {
     throw new Error('A note cannot be its own parent');
   }
 
@@ -100,8 +112,10 @@ export async function updateNote(noteId, projectId, userId, title, content, pare
      SET title = $1, content = $2, parent_note_id = $3, updated_at = CURRENT_TIMESTAMP
      WHERE id = $4 AND project_id = $5
      RETURNING id, project_id, parent_note_id, title, content, position, created_at, updated_at`,
-    [title, content, parentNoteId, noteId, projectId]
+    [title, content, newParentNoteId, noteId, projectId]
   );
+
+  console.log('Updated note result:', result.rows[0]);
 
   return result.rows[0];
 }

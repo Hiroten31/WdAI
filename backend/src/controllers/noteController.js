@@ -70,11 +70,34 @@ export async function createNewNote(req, res) {
 export async function updateNoteHandler(req, res) {
   try {
     const { projectId, noteId } = req.params;
-    const { title, content, parentNoteId } = req.body;
+    const { title, content } = req.body;
+
+  console.log('=== UPDATE NOTE REQUEST ===');
+  console.log('req.body:', JSON.stringify(req.body, null, 2));
+  console.log('req.body keys:', Object.keys(req.body));
+  console.log('hasOwnProperty parentNoteId:', req.body.hasOwnProperty('parentNoteId'));
+  console.log('"parentNoteId" in req.body:', 'parentNoteId' in req.body);
+  console.log('Details:', {
+      projectId, 
+      noteId, 
+      title, 
+      content,
+      hasParentNoteId: 'parentNoteId' in req.body,
+      parentNoteIdValue: req.body.parentNoteId,
+      bodyKeys: Object.keys(req.body)
+    });
 
     if (!title) {
       return res.status(400).json({ error: 'Title is required' });
     }
+
+    // Only pass parentNoteId if it's explicitly provided in the request body
+    const shouldUpdateParent = 'parentNoteId' in req.body;
+    const parentNoteId = shouldUpdateParent 
+      ? (req.body.parentNoteId ? parseInt(req.body.parentNoteId) : null)
+      : undefined;
+
+    console.log('Passing to service:', { shouldUpdateParent, parentNoteId });
 
     const note = await updateNote(
       parseInt(noteId),
@@ -82,7 +105,7 @@ export async function updateNoteHandler(req, res) {
       req.user.userId,
       title,
       content || '',
-      parentNoteId ? parseInt(parentNoteId) : null
+      parentNoteId
     );
 
     res.json(note);
