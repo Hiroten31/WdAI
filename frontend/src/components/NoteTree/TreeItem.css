@@ -1,0 +1,15 @@
+.tree-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tree-item-content {
+  padding: 0.75rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.tree-item-content.dragging {
+  opacity: 0.5;
+}

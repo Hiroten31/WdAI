@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getProjects, createProject, deleteProject } from '../api/authApi';
+import { LogOut } from 'lucide-react';
 import './Dashboard.css';
 
 export function Dashboard() {
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,8 +71,14 @@ export function Dashboard() {
           <h1>StoryForge</h1>
           <div className="user-info">
             <span>Welcome, {user?.username}!</span>
-            <button onClick={logout} className="logout-btn">
-              Logout
+            <button
+              onClick={() => {
+                logout();
+                navigate('/login');
+              }}
+              className="logout-btn"
+            >
+              <LogOut size={18} /> Logout
             </button>
           </div>
         </div>
@@ -139,9 +148,12 @@ export function Dashboard() {
                     <small>Created: {new Date(project.created_at).toLocaleDateString()}</small>
                   </div>
                   <div className="project-actions">
-                    <a href={`/project/${project.id}`} className="btn-secondary">
-                      View
-                    </a>
+                    <button
+                      onClick={() => navigate(`/projects/${project.id}`)}
+                      className="btn-secondary"
+                    >
+                      Open
+                    </button>
                     <button
                       onClick={() => handleDeleteProject(project.id)}
                       className="btn-danger"

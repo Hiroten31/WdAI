@@ -48,3 +48,52 @@ export async function deleteProject(id) {
   const response = await apiClient.delete(`/projects/${id}`);
   return response.data;
 }
+
+// Notes API
+export async function getNotes(projectId) {
+  const response = await apiClient.get(`/projects/${projectId}/notes`);
+  return response.data;
+}
+
+export async function getNote(projectId, noteId) {
+  const response = await apiClient.get(`/projects/${projectId}/notes/${noteId}`);
+  return response.data;
+}
+
+export async function createNote(projectId, title, content = '', parentNoteId = null) {
+  const response = await apiClient.post(`/projects/${projectId}/notes`, {
+    title,
+    content,
+    parentNoteId,
+  });
+  return response.data;
+}
+
+export async function updateNote(projectId, noteId, title, content = '', parentNoteId = null) {
+  const response = await apiClient.put(`/projects/${projectId}/notes/${noteId}`, {
+    title,
+    content,
+    parentNoteId,
+  });
+  return response.data;
+}
+
+export async function deleteNote(projectId, noteId) {
+  const response = await apiClient.delete(`/projects/${projectId}/notes/${noteId}`);
+  return response.data;
+}
+
+export async function moveNote(projectId, noteId, parentNoteId = null) {
+  const response = await apiClient.patch(`/projects/${projectId}/notes/${noteId}/move`, {
+    parentNoteId,
+  });
+  return response.data;
+}
+
+export async function reorderNote(projectId, noteId, parentNoteId, position) {
+  const response = await apiClient.patch(`/projects/${projectId}/notes/${noteId}/reorder`, {
+    parentNoteId,
+    position,
+  });
+  return response.data;
+}
