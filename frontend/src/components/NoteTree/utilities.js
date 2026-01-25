@@ -18,6 +18,18 @@ function getMinDepth({ nextItem }) {
   return 0;
 }
 
+function isDescendant(items, parentId, potentialChildId) {
+  // Check if potentialChildId is a descendant of parentId
+  const traverse = (id) => {
+    const children = items.filter((item) => item.parentId === id);
+    if (children.some((child) => child.id === potentialChildId)) {
+      return true;
+    }
+    return children.some((child) => traverse(child.id));
+  };
+  return traverse(parentId);
+}
+
 export function getProjection(items, activeId, overId, dragOffset, indentationWidth) {
   const overItemIndex = items.findIndex(({ id }) => id === overId);
   const activeItemIndex = items.findIndex(({ id }) => id === activeId);
@@ -32,8 +44,14 @@ export function getProjection(items, activeId, overId, dragOffset, indentationWi
   const nextItem = newItems[overItemIndex + 1];
   const dragDepth = getDragDepth(dragOffset, indentationWidth);
   const projectedDepth = activeItem.depth + dragDepth;
-  const maxDepth = getMaxDepth({ previousItem });
+  
+  let maxDepth = getMaxDepth({ previousItem });
   const minDepth = getMinDepth({ nextItem });
+  
+  // Prevent dropping active item into its own descendants
+  if (previousItem && isDescendant(items, activeId, previousItem.id)) {
+    maxDepth = previousItem.depth;
+  }
   
   let depth = projectedDepth;
   
@@ -64,7 +82,14 @@ export function getProjection(items, activeId, overId, dragOffset, indentationWi
     return newParent ?? null;
   }
 
-  return { depth, maxDepth, minDepth, parentId: getParentId() };
+  const parentId = getParentId();
+  
+  // Final validation: don't allow creating a cycle
+  if (parentId && isDescendant(items, activeId, parentId)) {
+    return null; // Invalid projection - would create a cycle
+  }
+
+  return { depth, maxDepth, minDepth, parentId };
 }
 
 export function flatten(items, parentId = null, depth = 0) {

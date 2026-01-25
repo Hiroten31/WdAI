@@ -181,7 +181,8 @@ export function ProjectPage() {
   const handleDragEnd = ({ active, over }) => {
     resetDragState();
 
-    if (projected && over) {
+    // Only proceed if projection is valid (null means operation would create a cycle)
+    if (projected !== null && projected && over) {
       const { depth, parentId } = projected;
       const clonedItems = JSON.parse(JSON.stringify(flattenedNotes));
       const overIndex = clonedItems.findIndex(({ id }) => id === over.id);
