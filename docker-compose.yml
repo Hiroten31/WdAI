@@ -11,7 +11,21 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql
-      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./backend/seed_data.sql:/docker-entrypoint-initdb.d/02-seed_data.sql
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
 
   backend:
     build: ./backend
@@ -20,8 +34,10 @@ services:
       - "3000:3000"
     depends_on:
       - db
+      - rabbitmq
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/appdb
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
     volumes:
       - ./backend/src:/app/src
 
@@ -38,3 +54,4 @@ services:
 
 volumes:
   pgdata:
+  rabbitmqdata:

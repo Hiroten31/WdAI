@@ -6,6 +6,7 @@ import { Dashboard } from './pages/Dashboard';
 import { ProjectPage } from './pages/ProjectPage';
 import { NoteEditorPage } from './pages/NoteEditorPage';
 import './App.css';
+import { NotFound } from './pages/NotFound';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -44,6 +45,7 @@ function AppRoutes() {
         }
       />
       <Route path="/" element={<Navigate to={isAuthenticated ? '/dashboard' : '/login'} />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

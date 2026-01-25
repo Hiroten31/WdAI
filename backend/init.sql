@@ -53,8 +53,10 @@ CREATE INDEX idx_notes_parent_id ON notes(parent_note_id);
 CREATE INDEX idx_tags_project_id ON tags(project_id);
 
 -- Test data
+-- Password for testuser is: password123
+-- Hash generated with bcrypt (rounds: 10)
 INSERT INTO users (username, email, password_hash) VALUES 
-('testuser', 'test@example.com', 'placeholder_hash_will_be_updated');
+('testuser', 'test@example.com', '$2b$10$q4SLhJLQlpRg1RnHvCGLMuv1yy9v.kspw11pp8zQYE.39fzwWl7I6');
 
 INSERT INTO projects (user_id, title, description) VALUES
 (1, 'Fantasy World', 'Building a fantasy world with characters and locations'),

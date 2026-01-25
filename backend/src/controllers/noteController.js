@@ -7,6 +7,7 @@ import {
   moveNote,
   reorderNote,
 } from '../services/noteService.js';
+import { publishNoteEvent } from '../services/rabbitmqService.js';
 
 export async function getNotes(req, res) {
   try {
@@ -57,6 +58,14 @@ export async function createNewNote(req, res) {
       description || '',
       tagIds
     );
+
+    // Publish async event
+    await publishNoteEvent('note_created', {
+      id: note.id,
+      projectId: note.project_id,
+      title: note.title,
+      userId: req.user.userId,
+    });
 
     res.status(201).json(note);
   } catch (error) {
@@ -114,6 +123,14 @@ export async function updateNoteHandler(req, res) {
       tagIds
     );
 
+    // Publish async event
+    await publishNoteEvent('note_updated', {
+      id: note.id,
+      projectId: note.project_id,
+      title: note.title,
+      userId: req.user.userId,
+    });
+
     res.json(note);
   } catch (error) {
     console.error('Update note error:', error);
@@ -131,6 +148,13 @@ export async function deleteNoteHandler(req, res) {
   try {
     const { projectId, noteId } = req.params;
     await deleteNote(parseInt(noteId), parseInt(projectId), req.user.userId);
+
+    // Publish async event
+    await publishNoteEvent('note_deleted', {
+      id: noteId,
+      projectId: projectId,
+      userId: req.user.userId,
+    });
 
     res.json({ message: 'Note deleted successfully' });
   } catch (error) {

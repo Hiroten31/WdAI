@@ -106,14 +106,69 @@ I will need to use [this feature](https://master--5fc05e08a4a65d0021ae0bf2.chrom
 
 ## 9. Authentication
 
+✅ **JWT Implementation**
+- Tokens are generated in `backend/src/services/tokenService.js`
+- Session duration: **7 days** (`expiresIn: '7d'`)
+- Middleware protection in `backend/src/middleware/authMiddleware.js`
+- Frontend sends tokens via `Authorization: Bearer <token>` header (configured in `frontend/src/api/apiClient.js`)
+- Login/Register endpoints: `POST /api/auth/login`, `POST /api/auth/register`
+
 ## 10. API
+
+✅ **RESTful API with proper error handling**
+- Status codes: 200 (success), 201 (created), 400 (bad request), 401 (unauthorized), 403 (forbidden), 404 (not found), 500 (server error)
+- 404 responses for unknown API routes return `{ "error": "Not Found" }`
+- Global error handler returns JSON errors with appropriate HTTP status codes
+- Routes defined in `backend/src/routes/index.js`
 
 ## 11. Frontend-API
 
+✅ **Proper API integration**
+- Axios client with Bearer token injection: `frontend/src/api/apiClient.js`
+- Error handling and loading states in pages (Dashboard, ProjectPage, NoteEditorPage)
+- React Context for auth state management: `frontend/src/context/AuthContext.jsx`
+
 ## 12. Code quality
 
-The best!
+✅ Clean code architecture:
+- Services separate business logic from controllers
+- No code duplication; utility functions reused
+- Consistent naming conventions (camelCase for functions, snake_case for DB columns)
+- Clear file organization: controllers → services → middleware
 
 ## 13. Asynchronous processing / queues
 
+✅ **RabbitMQ Integration**
+- Producer: `backend/src/services/rabbitmqService.js`
+- Events published on note operations:
+  - `note_created` - when a note is created
+  - `note_updated` - when a note is updated
+  - `note_deleted` - when a note is deleted
+- Events are published from `backend/src/controllers/noteController.js`
+- Configuration: RabbitMQ runs in Docker (see `docker-compose.yml`), accessible via `amqp://guest:guest@rabbitmq:5672`
+- Example use case: async notifications, audit logs, or downstream services consuming events
+- **Note:** RabbitMQ is gracefully optional—if the service is unavailable, the app continues to work
+
+**Testing RabbitMQ:**
+```bash
+# Access RabbitMQ management UI
+http://localhost:15672
+# User: guest | Password: guest
+
+# To consume events, call consumeNoteEvents() from rabbitmqService.js
+```
+
 ## 14. API documentation
+
+✅ **Swagger/OpenAPI Documentation**
+- UI available at: `http://localhost:3000/api/docs`
+- Configured with Swagger UI Express + swagger-jsdoc
+- Schema definition: `backend/src/swagger.js`
+- Interactive API explorer with request/response examples
+- Schemas for all endpoints (User, Project, Note, Tag, Error)
+
+**Quick start:**
+```bash
+docker-compose up -d
+# Then visit http://localhost:3000/api/docs
+```
