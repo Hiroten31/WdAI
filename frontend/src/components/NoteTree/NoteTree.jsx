@@ -6,7 +6,7 @@ import {
 import { TreeItem } from './TreeItem';
 import './NoteTree.css';
 
-export function NoteTree({ notes, projectId, onNoteCreate, onNoteDelete, onNoteMove, activeId, projected, indentationWidth = 50 }) {
+export function NoteTree({ notes, projectId, onNoteCreate, onNoteDelete, onNoteMove, onAddChild, activeId, projected, indentationWidth = 50 }) {
   const [expandedItems, setExpandedItems] = useState(new Set());
 
   const toggleExpanded = (noteId) => {
@@ -20,8 +20,13 @@ export function NoteTree({ notes, projectId, onNoteCreate, onNoteDelete, onNoteM
   };
 
   const handleAddChild = (parentId) => {
+    if (typeof onAddChild === 'function') {
+      onAddChild(parentId);
+      return;
+    }
+    // Fallback: prompt if no modal handler provided
     const title = prompt('Enter note title:');
-    if (title) {
+    if (title && typeof onNoteCreate === 'function') {
       onNoteCreate(title, '', parentId);
     }
   };

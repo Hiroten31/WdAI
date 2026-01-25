@@ -76,12 +76,13 @@ export async function getNote(projectId, noteId) {
   return response.data;
 }
 
-export async function createNote(projectId, title, content = '', parentNoteId = null, description = '') {
+export async function createNote(projectId, title, content = '', parentNoteId = null, description = '', tagIds = []) {
   const response = await apiClient.post(`/projects/${projectId}/notes`, {
     title,
     content,
     description,
     parentNoteId,
+    tagIds,
   });
   return response.data;
 }

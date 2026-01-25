@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getNotes, createNote, deleteNote, moveNote, reorderNote, getProject, getTags, createTag, deleteTagApi } from '../api/authApi';
 import { NoteTree } from '../components/NoteTree/NoteTree';
@@ -33,6 +33,11 @@ export function ProjectPage() {
   const [notes, setNotes] = useState([]);
   const [tags, setTags] = useState([]);
   const [newTagName, setNewTagName] = useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newNoteTitle, setNewNoteTitle] = useState('');
+  const [newNoteDescription, setNewNoteDescription] = useState('');
+  const [newNoteParentId, setNewNoteParentId] = useState('');
+  const [newNoteTagIds, setNewNoteTagIds] = useState([]);
   const [selectedTagsForFilter, setSelectedTagsForFilter] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -123,12 +128,47 @@ export function ProjectPage() {
     }
   };
 
-  const handleCreateNote = async (title, content = '', parentNoteId = null) => {
+  const openAddNoteModal = (parentId = '') => {
+    setNewNoteTitle('');
+    setNewNoteDescription('');
+    setNewNoteParentId(parentId || '');
+    setNewNoteTagIds([]);
+    setIsAddModalOpen(true);
+  };
+
+  const handleSubmitNewNote = async (eOrTitle, _contentUnused, parentFromArgs = null) => {
+    // Support both modal submit (event) and fallback prompt signature
+    const isEvent = eOrTitle && typeof eOrTitle.preventDefault === 'function';
+    if (isEvent) {
+      eOrTitle.preventDefault();
+    }
+
+    const title = isEvent ? newNoteTitle.trim() : (eOrTitle || '').trim();
+    const parentId = isEvent
+      ? (newNoteParentId ? parseInt(newNoteParentId) : null)
+      : (parentFromArgs ? parentFromArgs : null);
+    const description = isEvent ? newNoteDescription.trim() : '';
+    const tagIdsToSend = isEvent ? newNoteTagIds.map((id) => parseInt(id)) : [];
+
+    if (!title) return;
+
     try {
-      const newNote = await createNote(projectId, title, content, parentNoteId);
-      setNotes([...notes, newNote]);
-      setNewNoteTitle('');
-      setNewNoteContent('');
+      const created = await createNote(
+        projectId,
+        title,
+        '',
+        parentId,
+        description,
+        tagIdsToSend
+      );
+      setNotes([...notes, created]);
+      if (isEvent) {
+        setIsAddModalOpen(false);
+        setNewNoteTitle('');
+        setNewNoteDescription('');
+        setNewNoteParentId('');
+        setNewNoteTagIds([]);
+      }
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to create note');
     }
@@ -361,12 +401,7 @@ export function ProjectPage() {
             <h2>Notes</h2>
             <button
               className="btn-primary"
-              onClick={() => {
-                const title = prompt('Enter note title:');
-                if (title) {
-                  handleCreateNote(title, '');
-                }
-              }}
+              onClick={() => openAddNoteModal('')}
             >
               + Add Note
             </button>
@@ -437,9 +472,10 @@ export function ProjectPage() {
               <NoteTree
                 notes={treeNotes}
                 projectId={projectId}
-                onNoteCreate={handleCreateNote}
+                onNoteCreate={handleSubmitNewNote}
                 onNoteDelete={handleDeleteNote}
                 onNoteMove={handleReorderNote}
+                onAddChild={(parentId) => openAddNoteModal(parentId)}
                 activeId={activeId}
                 projected={projected}
                 indentationWidth={indentationWidth}
@@ -458,6 +494,94 @@ export function ProjectPage() {
           </DndContext>
         </div>
       </div>
+
+      {isAddModalOpen && (
+        <div className="modal-backdrop" onClick={() => setIsAddModalOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Add Note</h3>
+              <button className="modal-close" onClick={() => setIsAddModalOpen(false)} aria-label="Close">×</button>
+            </div>
+            <form className="modal-body" onSubmit={handleSubmitNewNote}>
+              <label className="modal-field">
+                <span>Title *</span>
+                <input
+                  type="text"
+                  value={newNoteTitle}
+                  onChange={(e) => setNewNoteTitle(e.target.value)}
+                  placeholder="Enter title"
+                  required
+                />
+              </label>
+
+              <label className="modal-field">
+                <span>Description</span>
+                <textarea
+                  value={newNoteDescription}
+                  onChange={(e) => setNewNoteDescription(e.target.value)}
+                  placeholder="Brief description"
+                  rows={3}
+                />
+              </label>
+
+              <label className="modal-field">
+                <span>Parent</span>
+                <select
+                  value={newNoteParentId}
+                  onChange={(e) => setNewNoteParentId(e.target.value)}
+                >
+                  <option value="">(no parent)</option>
+                  {notes
+                    .slice()
+                    .sort((a, b) => a.title.localeCompare(b.title))
+                    .map((n) => (
+                      <option key={n.id} value={n.id}>
+                        {n.title}
+                      </option>
+                    ))}
+                </select>
+              </label>
+
+              <div className="modal-field">
+                <span>Tags</span>
+                <div className="modal-tags-grid">
+                  {tags.length === 0 && <span className="modal-tags-empty">No tags in project</span>}
+                  {tags.map((tag) => {
+                    const tagIdNum = parseInt(tag.id);
+                    const checked = newNoteTagIds.some((id) => parseInt(id) === tagIdNum);
+                    return (
+                      <label key={tag.id} className={`modal-tag-pill ${checked ? 'selected' : ''}`}>
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={(e) => {
+                            const isChecked = e.target.checked;
+                            setNewNoteTagIds((prev) =>
+                              isChecked
+                                ? [...prev, tagIdNum]
+                                : prev.filter((id) => parseInt(id) !== tagIdNum)
+                            );
+                          }}
+                        />
+                        <span>{tag.name}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-secondary" onClick={() => setIsAddModalOpen(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn-primary" disabled={!newNoteTitle.trim()}>
+                  Add
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

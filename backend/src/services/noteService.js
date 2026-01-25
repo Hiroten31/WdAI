@@ -55,7 +55,7 @@ export async function getNoteById(noteId, projectId, userId) {
   return { ...note, tags: tagsResult.rows };
 }
 
-export async function createNote(projectId, userId, title, content = '', parentNoteId = null, description = '') {
+export async function createNote(projectId, userId, title, content = '', parentNoteId = null, description = '', tagIds = undefined) {
   // Verify user owns the project
   const projectCheck = await pool.query(
     'SELECT id FROM projects WHERE id = $1 AND user_id = $2',
@@ -94,7 +94,46 @@ export async function createNote(projectId, userId, title, content = '', parentN
     [projectId, parentNoteId, title, description, content, position]
   );
 
-  return result.rows[0];
+  const insertedNote = result.rows[0];
+
+  // If tagIds provided, validate and insert associations
+  if (tagIds !== undefined) {
+    if (!Array.isArray(tagIds)) {
+      throw new Error('tagIds must be an array');
+    }
+
+    if (tagIds.length > 0) {
+      const distinctIds = Array.from(new Set(tagIds.map((id) => parseInt(id))));
+      const tagsCheck = await pool.query(
+        `SELECT t.id FROM tags t 
+         JOIN projects p ON t.project_id = p.id 
+         WHERE t.project_id = $1 AND p.user_id = $2 AND t.id = ANY($3::int[])`,
+        [projectId, userId, distinctIds]
+      );
+
+      if (tagsCheck.rows.length !== distinctIds.length) {
+        throw new Error('One or more tags not found in this project');
+      }
+
+      await pool.query(
+        `INSERT INTO note_tags (note_id, tag_id)
+         SELECT $1, UNNEST($2::int[])`,
+        [insertedNote.id, distinctIds]
+      );
+    }
+  }
+
+  // Fetch tags to return consistent shape
+  const tagsResult = await pool.query(
+    `SELECT t.id, t.name
+     FROM tags t
+     JOIN note_tags nt ON nt.tag_id = t.id
+     WHERE nt.note_id = $1
+     ORDER BY t.name ASC`,
+    [insertedNote.id]
+  );
+
+  return { ...insertedNote, tags: tagsResult.rows };
 }
 
 export async function updateNote(noteId, projectId, userId, title, content, parentNoteId = undefined, description = undefined, tagIds = undefined) {

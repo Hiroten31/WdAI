@@ -54,7 +54,8 @@ export async function createNewNote(req, res) {
       title,
       content || '',
       parentNoteId ? parseInt(parentNoteId) : null,
-      description || ''
+      description || '',
+      tagIds
     );
 
     res.status(201).json(note);
