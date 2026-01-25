@@ -11,6 +11,7 @@ export function NoteEditorPage() {
   
   const [note, setNote] = useState(null);
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -30,7 +31,7 @@ export function NoteEditorPage() {
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [content, title, hasUnsavedChanges]);
+  }, [content, title, description, hasUnsavedChanges]);
 
   const fetchNote = async () => {
     try {
@@ -48,6 +49,7 @@ export function NoteEditorPage() {
 
       setNote(foundNote);
       setTitle(foundNote.title);
+      setDescription(foundNote.description || '');
       setContent(foundNote.content || '');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load note');
@@ -73,7 +75,7 @@ export function NoteEditorPage() {
     try {
       setSaving(true);
       // Don't send parentNoteId to avoid moving the note
-      await updateNote(projectId, noteId, title, content);
+      await updateNote(projectId, noteId, title, content, undefined, description);
       setHasUnsavedChanges(false);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to save note');
@@ -158,6 +160,17 @@ export function NoteEditorPage() {
             setHasUnsavedChanges(true);
           }}
           placeholder="Note title..."
+        />
+
+        <textarea
+          className="note-description-input"
+          value={description}
+          onChange={(e) => {
+            setDescription(e.target.value);
+            setHasUnsavedChanges(true);
+          }}
+          placeholder="Note description..."
+          rows={3}
         />
 
         <div className="markdown-editor-container" data-color-mode="light">

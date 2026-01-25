@@ -13,7 +13,7 @@ export async function getNotesByProjectId(projectId, userId) {
 
   // Get all notes for the project
   const result = await pool.query(
-    `SELECT id, project_id, parent_note_id, title, content, position, created_at, updated_at 
+    `SELECT id, project_id, parent_note_id, title, description, content, position, created_at, updated_at 
      FROM notes 
      WHERE project_id = $1 
      ORDER BY parent_note_id NULLS FIRST, position ASC, created_at ASC`,
@@ -25,7 +25,7 @@ export async function getNotesByProjectId(projectId, userId) {
 
 export async function getNoteById(noteId, projectId, userId) {
   const result = await pool.query(
-    `SELECT n.id, n.project_id, n.parent_note_id, n.title, n.content, n.position, n.created_at, n.updated_at
+    `SELECT n.id, n.project_id, n.parent_note_id, n.title, n.description, n.content, n.position, n.created_at, n.updated_at
      FROM notes n
      JOIN projects p ON n.project_id = p.id
      WHERE n.id = $1 AND n.project_id = $2 AND p.user_id = $3`,
@@ -35,7 +35,7 @@ export async function getNoteById(noteId, projectId, userId) {
   return result.rows[0];
 }
 
-export async function createNote(projectId, userId, title, content = '', parentNoteId = null) {
+export async function createNote(projectId, userId, title, content = '', parentNoteId = null, description = '') {
   // Verify user owns the project
   const projectCheck = await pool.query(
     'SELECT id FROM projects WHERE id = $1 AND user_id = $2',
@@ -68,19 +68,19 @@ export async function createNote(projectId, userId, title, content = '', parentN
   const position = positionResult.rows[0].next_position;
 
   const result = await pool.query(
-    `INSERT INTO notes (project_id, parent_note_id, title, content, position) 
-     VALUES ($1, $2, $3, $4, $5) 
-     RETURNING id, project_id, parent_note_id, title, content, position, created_at, updated_at`,
-    [projectId, parentNoteId, title, content, position]
+    `INSERT INTO notes (project_id, parent_note_id, title, description, content, position) 
+     VALUES ($1, $2, $3, $4, $5, $6) 
+     RETURNING id, project_id, parent_note_id, title, description, content, position, created_at, updated_at`,
+    [projectId, parentNoteId, title, description, content, position]
   );
 
   return result.rows[0];
 }
 
-export async function updateNote(noteId, projectId, userId, title, content, parentNoteId = undefined) {
+export async function updateNote(noteId, projectId, userId, title, content, parentNoteId = undefined, description = undefined) {
   // Verify user owns the note (through project)
   const noteCheck = await pool.query(
-    `SELECT n.id, n.parent_note_id FROM notes n
+    `SELECT n.id, n.parent_note_id, n.description FROM notes n
      JOIN projects p ON n.project_id = p.id
      WHERE n.id = $1 AND n.project_id = $2 AND p.user_id = $3`,
     [noteId, projectId, userId]
@@ -91,15 +91,19 @@ export async function updateNote(noteId, projectId, userId, title, content, pare
   }
 
   const currentParentId = noteCheck.rows[0].parent_note_id;
+  const currentDescription = noteCheck.rows[0].description || '';
   
   // If parentNoteId is not provided (undefined), keep the current parent_note_id
   const newParentNoteId = parentNoteId !== undefined ? parentNoteId : currentParentId;
+  const newDescription = description !== undefined ? description : currentDescription;
 
   console.log('updateNote service:', { 
     noteId, 
     currentParentId, 
     receivedParentNoteId: parentNoteId,
-    newParentNoteId 
+    newParentNoteId,
+    currentDescription,
+    newDescription
   });
 
   // Prevent circular references
@@ -109,10 +113,10 @@ export async function updateNote(noteId, projectId, userId, title, content, pare
 
   const result = await pool.query(
     `UPDATE notes 
-     SET title = $1, content = $2, parent_note_id = $3, updated_at = CURRENT_TIMESTAMP
-     WHERE id = $4 AND project_id = $5
-     RETURNING id, project_id, parent_note_id, title, content, position, created_at, updated_at`,
-    [title, content, newParentNoteId, noteId, projectId]
+     SET title = $1, description = $2, content = $3, parent_note_id = $4, updated_at = CURRENT_TIMESTAMP
+     WHERE id = $5 AND project_id = $6
+     RETURNING id, project_id, parent_note_id, title, description, content, position, created_at, updated_at`,
+    [title, newDescription, content, newParentNoteId, noteId, projectId]
   );
 
   console.log('Updated note result:', result.rows[0]);

@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS notes (
   project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
   parent_note_id INTEGER REFERENCES notes(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
+  description TEXT,
   content TEXT,
   position INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -66,10 +67,10 @@ INSERT INTO tags (project_id, name) VALUES
 (2, 'planet'),
 (2, 'technology');
 
-INSERT INTO notes (project_id, title, content) VALUES
-(1, 'Nilfgaard', 'A peaceful village in the northern lands'),
-(1, 'Cynthia', 'A brave warrior and protector of Nilfgaard'),
-(2, 'Mars Colony', 'First human settlement on Mars');
+INSERT INTO notes (project_id, title, description, content) VALUES
+(1, 'Nilfgaard', 'A peaceful village in the northern lands', 'A peaceful village in the northern lands'),
+(1, 'Cynthia', 'A brave warrior and protector of Nilfgaard', 'A brave warrior and protector of Nilfgaard'),
+(2, 'Mars Colony', 'First human settlement on Mars', 'First human settlement on Mars');
 
 INSERT INTO note_tags (note_id, tag_id) VALUES
 (1, 1), (1, 2),

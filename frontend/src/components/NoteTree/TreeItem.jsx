@@ -93,8 +93,8 @@ export function TreeItem({
             onClick={() => navigate(`/projects/${projectId}/notes/${note.id}`)}
           >
             <h4 className="note-title">{note.title}</h4>
-            {note.content && (
-              <p className="note-preview">{note.content.substring(0, 50)}...</p>
+            {!!(note.description && note.description.trim()) && (
+              <p className="note-preview">{note.description.trim().substring(0, 80)}{note.description.trim().length > 80 ? '…' : ''}</p>
             )}
           </div>
 

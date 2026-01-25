@@ -60,20 +60,24 @@ export async function getNote(projectId, noteId) {
   return response.data;
 }
 
-export async function createNote(projectId, title, content = '', parentNoteId = null) {
+export async function createNote(projectId, title, content = '', parentNoteId = null, description = '') {
   const response = await apiClient.post(`/projects/${projectId}/notes`, {
     title,
     content,
+    description,
     parentNoteId,
   });
   return response.data;
 }
 
-export async function updateNote(projectId, noteId, title, content = '', parentNoteId = undefined) {
+export async function updateNote(projectId, noteId, title, content = '', parentNoteId = undefined, description = undefined) {
   const body = {
     title,
     content,
   };
+  if (description !== undefined) {
+    body.description = description;
+  }
   
   // Only include parentNoteId if it's explicitly provided
   if (parentNoteId !== undefined) {
