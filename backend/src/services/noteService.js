@@ -11,16 +11,24 @@ export async function getNotesByProjectId(projectId, userId) {
     throw new Error('Project not found or access denied');
   }
 
-  // Get all notes for the project
+  // Get all notes with tags for the project
   const result = await pool.query(
-    `SELECT id, project_id, parent_note_id, title, description, content, position, created_at, updated_at 
-     FROM notes 
-     WHERE project_id = $1 
-     ORDER BY parent_note_id NULLS FIRST, position ASC, created_at ASC`,
+    `SELECT n.id, n.project_id, n.parent_note_id, n.title, n.description, n.content, n.position, n.created_at, n.updated_at,
+     COALESCE(JSON_AGG(JSON_BUILD_OBJECT('id', t.id, 'name', t.name) ORDER BY t.name) FILTER (WHERE t.id IS NOT NULL), '[]'::json) AS tags
+     FROM notes n
+     LEFT JOIN note_tags nt ON n.id = nt.note_id
+     LEFT JOIN tags t ON nt.tag_id = t.id
+     WHERE n.project_id = $1 
+     GROUP BY n.id, n.project_id, n.parent_note_id, n.title, n.description, n.content, n.position, n.created_at, n.updated_at
+     ORDER BY n.parent_note_id NULLS FIRST, n.position ASC, n.created_at ASC`,
     [projectId]
   );
 
-  return result.rows;
+  // Parse tags from JSON strings to arrays
+  return result.rows.map(row => ({
+    ...row,
+    tags: typeof row.tags === 'string' ? JSON.parse(row.tags) : row.tags
+  }));
 }
 
 export async function getNoteById(noteId, projectId, userId) {
@@ -32,7 +40,19 @@ export async function getNoteById(noteId, projectId, userId) {
     [noteId, projectId, userId]
   );
 
-  return result.rows[0];
+  const note = result.rows[0];
+  if (!note) return null;
+
+  const tagsResult = await pool.query(
+    `SELECT t.id, t.name
+     FROM tags t
+     JOIN note_tags nt ON nt.tag_id = t.id
+     WHERE nt.note_id = $1
+     ORDER BY t.name ASC`,
+    [noteId]
+  );
+
+  return { ...note, tags: tagsResult.rows };
 }
 
 export async function createNote(projectId, userId, title, content = '', parentNoteId = null, description = '') {
@@ -77,7 +97,7 @@ export async function createNote(projectId, userId, title, content = '', parentN
   return result.rows[0];
 }
 
-export async function updateNote(noteId, projectId, userId, title, content, parentNoteId = undefined, description = undefined) {
+export async function updateNote(noteId, projectId, userId, title, content, parentNoteId = undefined, description = undefined, tagIds = undefined) {
   // Verify user owns the note (through project)
   const noteCheck = await pool.query(
     `SELECT n.id, n.parent_note_id, n.description FROM notes n
@@ -103,7 +123,8 @@ export async function updateNote(noteId, projectId, userId, title, content, pare
     receivedParentNoteId: parentNoteId,
     newParentNoteId,
     currentDescription,
-    newDescription
+    newDescription,
+    tagIds
   });
 
   // Prevent circular references
@@ -111,6 +132,7 @@ export async function updateNote(noteId, projectId, userId, title, content, pare
     throw new Error('A note cannot be its own parent');
   }
 
+  // Update main note fields
   const result = await pool.query(
     `UPDATE notes 
      SET title = $1, description = $2, content = $3, parent_note_id = $4, updated_at = CURRENT_TIMESTAMP
@@ -118,6 +140,38 @@ export async function updateNote(noteId, projectId, userId, title, content, pare
      RETURNING id, project_id, parent_note_id, title, description, content, position, created_at, updated_at`,
     [title, newDescription, content, newParentNoteId, noteId, projectId]
   );
+
+  // If tagIds supplied, replace note_tags
+  if (tagIds !== undefined) {
+    if (!Array.isArray(tagIds)) {
+      throw new Error('tagIds must be an array');
+    }
+
+    // Ensure tags belong to project and user
+    if (tagIds.length > 0) {
+      const distinctIds = Array.from(new Set(tagIds.map((id) => parseInt(id))));
+      const tagsCheck = await pool.query(
+        `SELECT t.id FROM tags t 
+         JOIN projects p ON t.project_id = p.id 
+         WHERE t.project_id = $1 AND p.user_id = $2 AND t.id = ANY($3::int[])`,
+        [projectId, userId, distinctIds]
+      );
+      if (tagsCheck.rows.length !== distinctIds.length) {
+        throw new Error('One or more tags not found in this project');
+      }
+
+      // Replace associations
+      await pool.query('DELETE FROM note_tags WHERE note_id = $1', [noteId]);
+      await pool.query(
+        `INSERT INTO note_tags (note_id, tag_id)
+         SELECT $1, UNNEST($2::int[])`,
+        [noteId, distinctIds]
+      );
+    } else {
+      // Clear tags if empty array provided
+      await pool.query('DELETE FROM note_tags WHERE note_id = $1', [noteId]);
+    }
+  }
 
   console.log('Updated note result:', result.rows[0]);
 

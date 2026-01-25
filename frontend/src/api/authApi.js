@@ -28,6 +28,22 @@ export async function getProject(id) {
   return response.data;
 }
 
+// Tags API
+export async function getTags(projectId) {
+  const response = await apiClient.get(`/projects/${projectId}/tags`);
+  return response.data;
+}
+
+export async function createTag(projectId, name) {
+  const response = await apiClient.post(`/projects/${projectId}/tags`, { name });
+  return response.data;
+}
+
+export async function deleteTagApi(projectId, tagId) {
+  const response = await apiClient.delete(`/projects/${projectId}/tags/${tagId}`);
+  return response.data;
+}
+
 export async function createProject(title, description) {
   const response = await apiClient.post('/projects', {
     title,
@@ -70,13 +86,16 @@ export async function createNote(projectId, title, content = '', parentNoteId = 
   return response.data;
 }
 
-export async function updateNote(projectId, noteId, title, content = '', parentNoteId = undefined, description = undefined) {
+export async function updateNote(projectId, noteId, title, content = '', parentNoteId = undefined, description = undefined, tagIds = undefined) {
   const body = {
     title,
     content,
   };
   if (description !== undefined) {
     body.description = description;
+  }
+  if (Array.isArray(tagIds)) {
+    body.tagIds = tagIds;
   }
   
   // Only include parentNoteId if it's explicitly provided

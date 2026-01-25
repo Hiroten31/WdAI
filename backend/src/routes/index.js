@@ -16,6 +16,11 @@ import {
   moveNoteHandler,
   reorderNoteHandler
 } from '../controllers/noteController.js';
+import {
+  listTags,
+  createTagHandler,
+  deleteTagHandler,
+} from '../controllers/tagController.js';
 import { authMiddleware } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -39,5 +44,10 @@ router.put('/projects/:projectId/notes/:noteId', authMiddleware, updateNoteHandl
 router.delete('/projects/:projectId/notes/:noteId', authMiddleware, deleteNoteHandler);
 router.patch('/projects/:projectId/notes/:noteId/move', authMiddleware, moveNoteHandler);
 router.patch('/projects/:projectId/notes/:noteId/reorder', authMiddleware, reorderNoteHandler);
+
+// Protected routes - Tags
+router.get('/projects/:projectId/tags', authMiddleware, listTags);
+router.post('/projects/:projectId/tags', authMiddleware, createTagHandler);
+router.delete('/projects/:projectId/tags/:tagId', authMiddleware, deleteTagHandler);
 
 export default router;

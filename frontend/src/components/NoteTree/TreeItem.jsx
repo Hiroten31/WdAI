@@ -92,7 +92,16 @@ export function TreeItem({
             className="tree-item-info"
             onClick={() => navigate(`/projects/${projectId}/notes/${note.id}`)}
           >
-            <h4 className="note-title">{note.title}</h4>
+            <div className="note-title-with-tags">
+              <h4 className="note-title">{note.title}</h4>
+              {note.tags && note.tags.length > 0 && (
+                <div className="note-tags-inline">
+                  {note.tags.map((tag) => (
+                    <span key={tag.id} className="tag-badge">{tag.name}</span>
+                  ))}
+                </div>
+              )}
+            </div>
             {!!(note.description && note.description.trim()) && (
               <p className="note-preview">{note.description.trim().substring(0, 80)}{note.description.trim().length > 80 ? '…' : ''}</p>
             )}

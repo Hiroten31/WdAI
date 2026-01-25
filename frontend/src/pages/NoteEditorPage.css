@@ -145,6 +145,47 @@
   box-shadow: 0 0 0 3px rgba(35, 137, 255, 0.15);
 }
 
+.note-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.note-tags__label {
+  font-weight: 600;
+  color: #333;
+}
+
+.note-tags__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.note-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #d0d7e2;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  color: black;
+}
+
+.note-tag-chip input {
+  accent-color: #2389ff;
+}
+
+.note-tag-chip.selected {
+  background: #e8f3ff;
+  border-color: #2389ff;
+  color: #1e5eb3;
+}
+
 .markdown-editor-container {
   background: white;
   border-radius: 8px;

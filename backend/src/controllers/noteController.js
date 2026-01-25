@@ -42,7 +42,7 @@ export async function getNote(req, res) {
 export async function createNewNote(req, res) {
   try {
     const { projectId } = req.params;
-    const { title, content, parentNoteId, description } = req.body;
+    const { title, content, parentNoteId, description, tagIds } = req.body;
 
     if (!title) {
       return res.status(400).json({ error: 'Title is required' });
@@ -71,7 +71,7 @@ export async function createNewNote(req, res) {
 export async function updateNoteHandler(req, res) {
   try {
     const { projectId, noteId } = req.params;
-    const { title, content, description } = req.body;
+    const { title, content, description, tagIds } = req.body;
 
   console.log('=== UPDATE NOTE REQUEST ===');
   console.log('req.body:', JSON.stringify(req.body, null, 2));
@@ -84,6 +84,7 @@ export async function updateNoteHandler(req, res) {
       title, 
       content,
       description,
+      tagIds,
       hasParentNoteId: 'parentNoteId' in req.body,
       parentNoteIdValue: req.body.parentNoteId,
       bodyKeys: Object.keys(req.body)
@@ -108,7 +109,8 @@ export async function updateNoteHandler(req, res) {
       title,
       content || '',
       parentNoteId,
-      description
+      description,
+      tagIds
     );
 
     res.json(note);

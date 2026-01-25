@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MDEditor from '@uiw/react-md-editor';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
-import { getNotes, updateNote, deleteNote } from '../api/authApi';
+import { getNote, getTags, updateNote, deleteNote } from '../api/authApi';
 import './NoteEditorPage.css';
 
 export function NoteEditorPage() {
@@ -13,6 +13,8 @@ export function NoteEditorPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
+  const [projectTags, setProjectTags] = useState([]);
+  const [selectedTagIds, setSelectedTagIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -20,6 +22,7 @@ export function NoteEditorPage() {
 
   useEffect(() => {
     fetchNote();
+    fetchProjectTags();
   }, [noteId]);
 
   // Auto-save every 3 seconds if there are unsaved changes
@@ -31,17 +34,15 @@ export function NoteEditorPage() {
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [content, title, description, hasUnsavedChanges]);
+  }, [content, title, description, selectedTagIds, hasUnsavedChanges]);
 
   const fetchNote = async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      // Fetch all notes and find the specific one
-      const notes = await getNotes(projectId);
-      const foundNote = findNoteById(notes, parseInt(noteId));
-      
+
+      const foundNote = await getNote(projectId, noteId);
+
       if (!foundNote) {
         setError('Note not found');
         return;
@@ -51,6 +52,7 @@ export function NoteEditorPage() {
       setTitle(foundNote.title);
       setDescription(foundNote.description || '');
       setContent(foundNote.content || '');
+      setSelectedTagIds((foundNote.tags || []).map((t) => t.id));
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load note');
     } finally {
@@ -58,15 +60,14 @@ export function NoteEditorPage() {
     }
   };
 
-  const findNoteById = (notes, id) => {
-    for (const note of notes) {
-      if (note.id === id) return note;
-      if (note.children && note.children.length > 0) {
-        const found = findNoteById(note.children, id);
-        if (found) return found;
-      }
+  const fetchProjectTags = async () => {
+    try {
+      const tags = await getTags(projectId);
+      setProjectTags(tags);
+    } catch (err) {
+      // Non-fatal
+      console.error('Failed to load tags', err);
     }
-    return null;
   };
 
   const handleSave = async () => {
@@ -75,7 +76,7 @@ export function NoteEditorPage() {
     try {
       setSaving(true);
       // Don't send parentNoteId to avoid moving the note
-      await updateNote(projectId, noteId, title, content, undefined, description);
+      await updateNote(projectId, noteId, title, content, undefined, description, selectedTagIds);
       setHasUnsavedChanges(false);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to save note');
@@ -172,6 +173,34 @@ export function NoteEditorPage() {
           placeholder="Note description..."
           rows={3}
         />
+
+        {projectTags.length > 0 && (
+          <div className="note-tags">
+            <div className="note-tags__label">Tags</div>
+            <div className="note-tags__list">
+              {projectTags.map((tag) => {
+                const checked = selectedTagIds.includes(tag.id);
+                return (
+                  <label key={tag.id} className={`note-tag-chip ${checked ? 'selected' : ''}`}>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => {
+                        setSelectedTagIds((prev) => {
+                          const exists = prev.includes(tag.id);
+                          const next = exists ? prev.filter((id) => id !== tag.id) : [...prev, tag.id];
+                          return next;
+                        });
+                        setHasUnsavedChanges(true);
+                      }}
+                    />
+                    <span>{tag.name}</span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         <div className="markdown-editor-container" data-color-mode="light">
           <MDEditor

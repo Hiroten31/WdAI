@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getNotes, createNote, deleteNote, moveNote, reorderNote, getProject } from '../api/authApi';
+import { getNotes, createNote, deleteNote, moveNote, reorderNote, getProject, getTags, createTag, deleteTagApi } from '../api/authApi';
 import { NoteTree } from '../components/NoteTree/NoteTree';
 import { useAuth } from '../context/AuthContext';
 import { ArrowLeft } from 'lucide-react';
@@ -31,6 +31,8 @@ export function ProjectPage() {
 
   const [project, setProject] = useState(null);
   const [notes, setNotes] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [newTagName, setNewTagName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
@@ -81,12 +83,14 @@ export function ProjectPage() {
     try {
       setLoading(true);
       setError(null);
-      const [projectData, notesData] = await Promise.all([
+      const [projectData, notesData, tagsData] = await Promise.all([
         getProject(projectId),
         getNotes(projectId),
+        getTags(projectId),
       ]);
       setProject(projectData);
       setNotes(notesData);
+      setTags(tagsData);
     } catch (err) {
       const errorMsg = err.response?.data?.error || 'Failed to load project';
       setError(errorMsg);
@@ -95,6 +99,26 @@ export function ProjectPage() {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddTag = async () => {
+    if (!newTagName.trim()) return;
+    try {
+      const tag = await createTag(projectId, newTagName.trim());
+      setTags([...tags, tag].sort((a, b) => a.name.localeCompare(b.name)));
+      setNewTagName('');
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to create tag');
+    }
+  };
+
+  const handleDeleteTag = async (tagId) => {
+    try {
+      await deleteTagApi(projectId, tagId);
+      setTags(tags.filter((t) => t.id !== tagId));
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete tag');
     }
   };
 
@@ -296,6 +320,37 @@ export function ProjectPage() {
             >
               + Add Note
             </button>
+          </div>
+
+          <div className="tags-panel">
+            <div className="tags-panel__top">
+              <h3>Tags</h3>
+              <div className="tags-panel__controls">
+                <input
+                  type="text"
+                  value={newTagName}
+                  placeholder="New tag name"
+                  onChange={(e) => setNewTagName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleAddTag();
+                  }}
+                />
+                <button className="btn-primary" onClick={handleAddTag} disabled={!newTagName.trim()}>
+                  Add Tag
+                </button>
+              </div>
+            </div>
+            <div className="tags-panel__list">
+              {tags.length === 0 && <span className="tags-panel__empty">No tags yet</span>}
+              {tags.map((tag) => (
+                <span key={tag.id} className="tag-pill">
+                  {tag.name}
+                  <button className="tag-pill__delete" onClick={() => handleDeleteTag(tag.id)} title="Delete tag">
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
           </div>
 
           <DndContext
