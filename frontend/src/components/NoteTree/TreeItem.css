@@ -37,3 +37,8 @@
   font-weight: 600;
   white-space: nowrap;
 }
+
+.tree-item-content.ancestor-only {
+  opacity: 0.55;
+  background-color: rgba(0, 0, 0, 0.03);
+}

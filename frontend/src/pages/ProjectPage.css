@@ -146,6 +146,29 @@
   border-radius: 999px;
   font-size: 0.95rem;
   color: #1f2937;
+
+.tag-pill.selected {
+  background: #2389ff;
+  color: white;
+}
+
+.tag-pill__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tag-pill__label input {
+  margin: 0;
+  cursor: pointer;
+  accent-color: #2389ff;
+}
+
+.tag-pill__text {
+  font-weight: 500;
+}
 }
 
 .tag-pill__delete {

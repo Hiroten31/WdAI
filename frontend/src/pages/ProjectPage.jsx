@@ -33,6 +33,7 @@ export function ProjectPage() {
   const [notes, setNotes] = useState([]);
   const [tags, setTags] = useState([]);
   const [newTagName, setNewTagName] = useState('');
+  const [selectedTagsForFilter, setSelectedTagsForFilter] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
@@ -165,16 +166,65 @@ export function ProjectPage() {
     }
   };
 
+  // Helper: Get all ancestor IDs for a note
+  const getAncestorIds = (noteId, noteMap) => {
+    const ancestors = new Set();
+    let currentId = noteId;
+    while (currentId !== null && currentId !== undefined) {
+      const note = noteMap.get(currentId);
+      if (!note || !note.parent_note_id) break;
+      ancestors.add(note.parent_note_id);
+      currentId = note.parent_note_id;
+    }
+    return ancestors;
+  };
+
+  // Filter tree: if tags selected, show only matching notes and their ancestors
+  const filteredNotes = useMemo(() => {
+    if (selectedTagsForFilter.length === 0) return notes;
+
+    const noteMap = new Map();
+    notes.forEach((note) => noteMap.set(note.id, note));
+
+    const matchingIds = new Set();
+    const ancestorIds = new Set();
+
+    // Find all notes matching selected tags
+    notes.forEach((note) => {
+      const hasMatchingTag = note.tags && note.tags.some((tag) =>
+        selectedTagsForFilter.includes(tag.id)
+      );
+      if (hasMatchingTag) {
+        matchingIds.add(note.id);
+        // Add all ancestors
+        getAncestorIds(note.id, noteMap).forEach((id) => ancestorIds.add(id));
+      }
+    });
+
+    // Return filtered notes with metadata
+    return notes
+      .filter((note) => matchingIds.has(note.id) || ancestorIds.has(note.id))
+      .map((note) => {
+        const isMatching = matchingIds.has(note.id);
+        const isAncestor = ancestorIds.has(note.id);
+        return {
+          ...note,
+          _isMatching: isMatching,
+          _isAncestorOnly: isAncestor && !isMatching,
+        };
+      });
+  }, [notes, selectedTagsForFilter]);
+
   // Build tree structure from flat notes
   const treeNotes = useMemo(() => {
     const noteMap = new Map();
     const rootNotes = [];
 
-    notes.forEach((note) => {
+    filteredNotes.forEach((note) => {
       noteMap.set(note.id, { ...note, children: [] });
     });
 
-    notes.forEach((note) => {
+    filteredNotes.forEach((note) => {
       if (note.parent_note_id) {
         const parent = noteMap.get(note.parent_note_id);
         if (parent) {
@@ -195,7 +245,7 @@ export function ProjectPage() {
     });
 
     return rootNotes;
-  }, [notes]);
+  }, [filteredNotes]);
 
   // Flatten tree for drag operations
   const flattenedNotes = useMemo(() => {
@@ -342,14 +392,30 @@ export function ProjectPage() {
             </div>
             <div className="tags-panel__list">
               {tags.length === 0 && <span className="tags-panel__empty">No tags yet</span>}
-              {tags.map((tag) => (
-                <span key={tag.id} className="tag-pill">
-                  {tag.name}
-                  <button className="tag-pill__delete" onClick={() => handleDeleteTag(tag.id)} title="Delete tag">
-                    ×
-                  </button>
-                </span>
-              ))}
+              {tags.map((tag) => {
+                const isSelected = selectedTagsForFilter.includes(tag.id);
+                return (
+                  <span key={tag.id} className={`tag-pill ${isSelected ? 'selected' : ''}`}>
+                    <label className="tag-pill__label">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => {
+                          setSelectedTagsForFilter((prev) =>
+                            isSelected
+                              ? prev.filter((id) => id !== tag.id)
+                              : [...prev, tag.id]
+                          );
+                        }}
+                      />
+                      <span className="tag-pill__text">{tag.name}</span>
+                    </label>
+                    <button className="tag-pill__delete" onClick={() => handleDeleteTag(tag.id)} title="Delete tag">
+                      ×
+                    </button>
+                  </span>
+                );
+              })}
             </div>
           </div>
 
@@ -369,7 +435,7 @@ export function ProjectPage() {
           >
             <SortableContext items={sortedIds} strategy={verticalListSortingStrategy}>
               <NoteTree
-                notes={notes}
+                notes={treeNotes}
                 projectId={projectId}
                 onNoteCreate={handleCreateNote}
                 onNoteDelete={handleDeleteNote}
