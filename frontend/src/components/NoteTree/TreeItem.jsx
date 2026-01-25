@@ -63,7 +63,7 @@ export function TreeItem({
 
   return (
     <li ref={setNodeRef} style={style} className={`tree-item ${isOver ? 'over' : ''}`} data-id={note.id}>
-      <div className={`tree-item-content ${isDragging ? 'dragging' : ''} ${note._isAncestorOnly ? 'ancestor-only' : ''}`}>
+      <div className={`tree-item-content ${isDragging ? 'dragging' : ''} ${note._isAncestorOnly ? 'ancestor-only' : ''} ${note._isMatching ? 'matching' : ''}`}>
         <div className="tree-item-header" {...attributes}>
           <div className="drag-handle" {...listeners}>
             <GripVertical size={16} />

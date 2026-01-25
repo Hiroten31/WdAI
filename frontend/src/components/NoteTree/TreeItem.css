@@ -14,6 +14,11 @@
 .tree-item-content.dragging {
   opacity: 0.5;
 }
+
+.tree-item-content.matching {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
 .note-title-with-tags {
   display: flex;
   align-items: center;
@@ -39,6 +44,5 @@
 }
 
 .tree-item-content.ancestor-only {
-  opacity: 0.55;
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: transparent;
 }
